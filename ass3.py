@@ -23,10 +23,43 @@
 #* database of items --> list
 #* name, price
 
-list = [["tomato", 1], ["potato", 2], ["soap", 0.5]] # Nested list
+items = []
+
+def handle_products_count(list, product_name):
+    does_exist = False
+    
+    for item in list:
+        if item[0] == product_name:
+            item[1] += 1
+            does_exist = True
+
+    return does_exist
 
 def addItem():
-    print("Adding Items...")
+    add_again = True
+    print("\nAdding Items...")
+
+    while add_again:
+        product_name = input("Enter the info of the item you wanna add : ")
+        
+        check_products = handle_products_count(items, product_name)
+
+        if not check_products:
+            items.append([product_name, 1])
+        else:
+            print("Already exist")
+
+        print(items)
+
+        descision = input("\nWould you like to add another item or same maybe? Type y for yes, n for no ")
+
+        if descision == "n":
+            add_again = False
+        elif descision == "y":
+            print("\nAdding another Item...")
+        else:
+            print("Invalid Input - Try again")
+        
 
 def checkTotalBill():
     print("checking Total Bill")
@@ -38,9 +71,9 @@ def checkOut():
     print("Checking Out")
 
 def newOrder():
-    while choice != 4:
-        print("new order")
-        print("1. To add a new item")
+    get_new_order = True
+    while get_new_order:
+        print("\n1. To add a new item")
         print("2. Check the total of bill")
         print("3. To add a coupon")
         print("4. To checkout")
@@ -54,17 +87,19 @@ def newOrder():
         elif choice == 3:
             addCoupon()
         elif choice == 4:
-            checkOut()
+            get_new_order = False
         else:
             print("Invalid Input")
 
 
 def mainMenu():
-    while choice != 2:
+    get_out = True
+
+    while get_out:
         print("Welcome to neighbor’s dekene ")
         print("Pick one of these options ")
         print("1. To start a new order ")
-        print("2. To close the program")
+        print("2. To close the program ")
 
         choice = int(input())
 
@@ -73,6 +108,7 @@ def mainMenu():
             newOrder()
         elif choice == 2:
             print("“bye bye”")
+            get_out = False
         else:
             print("Invalid Input")
 
