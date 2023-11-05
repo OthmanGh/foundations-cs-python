@@ -11,15 +11,6 @@
 #* 2.	To check the total of the bill
 #* 3.	To add a coupon
 #* 4.	To checkout
-#* If the user inputs 3: the program asks for the value of the coupon and removes it from the total of the bill
-#* If the user inputs 4: the program prints all the items bought and their quantities
-#* If then prints the total of the order (without coupons)
-#* The total of the coupons
-#* And then the total they have to pay (total of order-total of coupons)
-#* once all of these are printed, aamo el dekanje is taken back to the original menu
-
-#* database of items --> list
-#* name, price
 
 # list --> name, count
 # another list will be generated for price, count
@@ -28,13 +19,11 @@
 
 import re
 
-user_items = []
-
 def is_valid_product(product_name):
     if len(product_name) < 4: # product name must have at least 4 characters
         return False
 
-    regex = "^[a-zA-Z\s]+$" # regular expression (only letters and spaces allowed for product name)
+    regex = "^[a-zA-Z\s]+$"# regular expression (only letters and spaces allowed for product name)
 
     if not re.match(regex, product_name):
         return False
@@ -51,7 +40,7 @@ def handle_products_count(item_list, product_name):
 
     return does_exist
 
-def add_item():
+def add_item(user_items):
     add_again = True
     print("\nAdding items...")
 
@@ -79,9 +68,9 @@ def add_item():
         else:
             print("Invalid Input - Try again")
 
-# *******************************************************************************************\
+# *******************************************************************************************
 
-#* If the user inputs 2: the program prints “the total of your bill is” and then the total
+# * If the user inputs 2: the program prints “the total of your bill is” and then the total, then asks them what they would like to do again.
 
 import random
 
@@ -95,36 +84,43 @@ def calc_total_price(item_info):
 
     return total
     
-def check_total_bill(list_items, size):
+def calc_total_bill(user_items):
+    total = 0
 
-    cnts_list = []
+    for item in user_items:
+        total += set_random_price() * item[1]
+    
+    return total
 
-    for item in list_items:
-        cnts_list.append(item[1])
+# *******************************************************************************************
 
-    item_info = []
+#* If the user inputs 3: the program asks for the value of the coupon and removes it from the total of the bill
 
-    for i in range(size):
-        item_info.append([set_random_price(), cnts_list[i]])
+def add_coupon(totalBill):
+    coupon = int(input("Enter coupn value : "))
+    if coupon > 0:
+        totalBill -= coupon
+        print(f"Coupon applied : -{coupon}$")
+    else:
+        print("Invalid coupon value")
 
-    print(item_info)
+#* If the user inputs 4: the program prints all the items bought and their quantities
+#* If then prints the total of the order (without coupons)
+#* The total of the coupons
+#* And then the total they have to pay (total of order-total of coupons)
+#* once all of these are printed, aamo el dekanje is taken back to the original menu
 
-    totalBill = calc_total_price(item_info)
 
-    print(f"the total of your bill is: {totalBill}$")
-
-    return totalBill
-
-# *******************************************************************************************\
-
-def add_coupon():
-    print("Adding a Coupon")
-
-def check_out():
-    print("Checking Out")
+def check_out(user_items, totalBill):
+    print("User bought : ", end=" ")
+    for entry in user_items:
+        print(f"{entry[1]} {entry[0]}", end=" ")
+    print("\nChecking Out")
+    print(f"Total Bill without coupons : {totalBill}$")
 
 def new_order():
     get_new_order = True
+    user_items = []
     while get_new_order:
         print("\n1. To add a new item")
         print("2. Check the total of the bill")
@@ -134,21 +130,25 @@ def new_order():
         choice = int(input())
 
         if choice == 1:
-            add_item()
+            add_item(user_items)
         elif choice == 2:
-            check_total_bill(user_items, len(user_items))
+            totalBill = calc_total_bill(user_items)
+            print(f"The total of your bill is : {totalBill}$") # this will do check total bill functionality 
         elif choice == 3:
-            add_coupon()
+            add_coupon(totalBill)
         elif choice == 4:
+            check_out(user_items, totalBill)
             get_new_order = False
         else:
             print("Invalid Input")
 
 def main_menu():
+
     get_out = True
+    
+    print("Welcome to the neighbor’s dekene")
 
     while get_out:
-        print("Welcome to the neighbor’s dekene")
         print("Pick one of these options")
         print("1. To start a new order")
         print("2. To close the program")
@@ -165,13 +165,3 @@ def main_menu():
             print("Invalid Input")
 
 main_menu()
-
-
-# regular expression (only letters and spaces allowed for product name)
-
-    # In the regular expression:
-    # ^ asserts the start of the string.
-    # [a-zA-Z\s] matches any uppercase letter, lowercase letter, or space.
-    # + ensures that one or more of these characters must be present.
-    # $ asserts the end of the string.
-
