@@ -11,8 +11,6 @@
 #* 2.	To check the total of the bill
 #* 3.	To add a coupon
 #* 4.	To checkout
-#* If the user inputs 1: the program asks them for the needed info to add an item to their order and then does so, then asks them what they would like to do again.
-#* If the user inputs 2: the program prints “the total of your bill is” and then the total, then asks them what they would like to do again.
 #* If the user inputs 3: the program asks for the value of the coupon and removes it from the total of the bill
 #* If the user inputs 4: the program prints all the items bought and their quantities
 #* If then prints the total of the order (without coupons)
@@ -22,6 +20,11 @@
 
 #* database of items --> list
 #* name, price
+
+# list --> name, count
+# another list will be generated for price, count
+
+#* If the user inputs 1: the program asks them for the needed info to add an item to their order and then does so, then asks them what they would like to do again.
 
 import re
 
@@ -76,8 +79,43 @@ def add_item():
         else:
             print("Invalid Input - Try again")
 
-def check_total_bill():
-    print("Checking Total Bill")
+# *******************************************************************************************\
+
+#* If the user inputs 2: the program prints “the total of your bill is” and then the total
+
+import random
+
+def set_random_price():
+    return random.randint(1, 20)
+
+def calc_total_price(item_info):
+    total = 0
+    for entry in item_info:
+        total += entry[0] * entry[1]
+
+    return total
+    
+def check_total_bill(list_items, size):
+
+    cnts_list = []
+
+    for item in list_items:
+        cnts_list.append(item[1])
+
+    item_info = []
+
+    for i in range(size):
+        item_info.append([set_random_price(), cnts_list[i]])
+
+    print(item_info)
+
+    totalBill = calc_total_price(item_info)
+
+    print(f"the total of your bill is: {totalBill}$")
+
+    return totalBill
+
+# *******************************************************************************************\
 
 def add_coupon():
     print("Adding a Coupon")
@@ -98,7 +136,7 @@ def new_order():
         if choice == 1:
             add_item()
         elif choice == 2:
-            check_total_bill()
+            check_total_bill(user_items, len(user_items))
         elif choice == 3:
             add_coupon()
         elif choice == 4:
