@@ -23,94 +23,117 @@
 #* database of items --> list
 #* name, price
 
-items = []
+import re
 
-def handle_products_count(list, product_name):
+user_items = []
+
+def is_valid_product(product_name):
+    if len(product_name) < 4: # product name must have at least 4 characters
+        return False
+
+    regex = "^[a-zA-Z\s]+$" # regular expression (only letters and spaces allowed for product name)
+
+    if not re.match(regex, product_name):
+        return False
+
+    return True
+
+def handle_products_count(item_list, product_name):
     does_exist = False
     
-    for item in list:
+    for item in item_list:
         if item[0] == product_name:
             item[1] += 1
             does_exist = True
 
     return does_exist
 
-def addItem():
+def add_item():
     add_again = True
-    print("\nAdding Items...")
+    print("\nAdding items...")
 
     while add_again:
-        product_name = input("Enter the info of the item you wanna add : ")
-        
-        check_products = handle_products_count(items, product_name)
+        product_name = input("Enter the info of the item you want to add: ")
 
-        if not check_products:
-            items.append([product_name, 1])
-        else:
-            print("Already exist")
+        if is_valid_product(product_name): # will check if user entered a new product or product already exist on the list user_items
+            check_products = handle_products_count(user_items, product_name)
 
-        print(items)
+            if not check_products:
+                user_items.append([product_name, 1])
+            else:
+                print("Item already exists")
 
-        descision = input("\nWould you like to add another item or same maybe? Type y for yes, n for no ")
+            print(user_items)
 
-        if descision == "n":
-            add_again = False
-        elif descision == "y":
-            print("\nAdding another Item...")
+            decision = input("\nWould you like to add another item? Type 'y' for yes, 'n' for no: ")
+
+            if decision == "n":
+                add_again = False
+            elif decision == "y":
+                print("\nAdding another item...")
+            else:
+                print("Invalid Input - Try again")
         else:
             print("Invalid Input - Try again")
-        
 
-def checkTotalBill():
-    print("checking Total Bill")
+def check_total_bill():
+    print("Checking Total Bill")
 
-def addCoupon():
+def add_coupon():
     print("Adding a Coupon")
 
-def checkOut():
+def check_out():
     print("Checking Out")
 
-def newOrder():
+def new_order():
     get_new_order = True
     while get_new_order:
         print("\n1. To add a new item")
-        print("2. Check the total of bill")
+        print("2. Check the total of the bill")
         print("3. To add a coupon")
         print("4. To checkout")
 
         choice = int(input())
 
         if choice == 1:
-            addItem()
+            add_item()
         elif choice == 2:
-            checkTotalBill()
+            check_total_bill()
         elif choice == 3:
-            addCoupon()
+            add_coupon()
         elif choice == 4:
             get_new_order = False
         else:
             print("Invalid Input")
 
-
-def mainMenu():
+def main_menu():
     get_out = True
 
     while get_out:
-        print("Welcome to neighbor’s dekene ")
-        print("Pick one of these options ")
-        print("1. To start a new order ")
-        print("2. To close the program ")
+        print("Welcome to the neighbor’s dekene")
+        print("Pick one of these options")
+        print("1. To start a new order")
+        print("2. To close the program")
 
         choice = int(input())
 
         if choice == 1:
-            print("starting a new order...")
-            newOrder()
+            print("Starting a new order...")
+            new_order()
         elif choice == 2:
-            print("“bye bye”")
+            print("Bye bye")
             get_out = False
         else:
             print("Invalid Input")
 
+main_menu()
 
-mainMenu()
+
+# regular expression (only letters and spaces allowed for product name)
+
+    # In the regular expression:
+    # ^ asserts the start of the string.
+    # [a-zA-Z\s] matches any uppercase letter, lowercase letter, or space.
+    # + ensures that one or more of these characters must be present.
+    # $ asserts the end of the string.
+
