@@ -25,65 +25,58 @@
 ### Transportation Company :
 # delivers to cities
 
-cities = ["Sour", "Saida", "Beirut", "Zahle", "Baalbek"]
-
-driver_route_dict = {
-    "Ahmad Solyman": ["Sour", "Saida"],
-    "Ali Hussein": ["Zahle"],
-    "Hilal Jomaa": ["Beirut"],
-    "Ali Ali": ["Beirut"],
-}
 
 # name of the city should be valid if: at least 4 chars, doesn't include any numbers, doesn't exist in the cities list
-def isValidCityNameList(city):
-    if len(city) < 3 or len(city) > 15:
+def isValidCityNameList(cities, enteredCity):
+    if len(enteredCity) < 3 or len(enteredCity) > 15:
         return False
     
-    for cityNames in cities: # Time Complexity O(N)
-        if city == cityNames.lower():
-            return 0
-    
-    for char in city: # Time Complexity O(N)
+    for char in enteredCity: # Time Complexity O(N)
         if char.isdigit():
             return False
     
+    for city in cities: # Time Complexity O(N)
+        if enteredCity == city.lower():
+            return "exists"
+        
     return True
 
-def addCity():
+def addCity(cities):
     city = input("\nEnter name of city you wanna add : ")
-    addToCities = isValidCityNameList(city.lower())
+    addToCities = isValidCityNameList(cities, city.lower())
 
     formattedCityName = city[0].upper() + city[1:].lower() # first letter Capital, rest small letters
-
-    if addToCities:
+    print(addToCities)
+    if addToCities == True:
         cities.append(formattedCityName)
-    elif addToCities == 0:
-        print(f"{formattedCityName} already exist on the list")
+    elif addToCities == "exists":
+        print(f"\n{formattedCityName} already exists on the list")
     else:
         print("You've entered an invalid city name")
 
+    print(cities)
 
 #* If the user input 2, they are asked the name of the driver and then the name of the cities they will visit (how you will ask for the route it up to you)
 
 # name of the city valid if: max chars 26, min 7, doesn't include any numbers, doesn't exist as a key in the driver_route_dict dictionary
 
-def formatDriverFullName(name):
-    [firstName, lastName] = name.split()
+def formatDriverFullName(fullName):
+    [firstName, lastName] = fullName.split()
     firstName = firstName[0].upper() + firstName[1:].lower()
     lastName = lastName[0].upper() + lastName[1:].lower()
     return  firstName + " " + lastName
 
-def spaceCount(name):
+def spaceCount(fullName):
 # also should include only 2 words first and last name otherwise error will be generated
     space_cnt = 0
-    for word in name:
+    for word in fullName:
         if ' ' in word:
             space_cnt+= 1
 
     return space_cnt
 
 
-def isValidDriverName(fullName):
+def isDriverFullNameValid(dict, fullName):
     if len(fullName) < 6 or len(fullName) > 25:
         return False
 
@@ -94,21 +87,21 @@ def isValidDriverName(fullName):
     if spaceCount(fullName) != 1:
         return False
         
-    for key in driver_route_dict: # key == fullName example : ("Ali Ali")
+    for key in dict: # key == fullName example : ("Ali Ali")
         if fullName == key.lower():
-            return "exist" 
+            return "exists" 
     
     return True
 
 # ! be careful 0 is a falsey value so condition == 0 same as if condition (val of condition = False)
 
-def addDriver():
+def addDriver(dict):
     driverFullName= input("Enter Driver Full Name : ")
-    isDriverFullNameValid = isValidDriverName(driverFullName.lower())
-    formattedDriverFullName = formatDriverFullName(driverFullName)
+    fullNameValidationResult = isDriverFullNameValid(dict, driverFullName.lower())
+    
+    if fullNameValidationResult == True:
 
-    if isDriverFullNameValid == True:
-
+        formattedDriverFullName = formatDriverFullName(driverFullName)
         print(formattedDriverFullName)
         driverRoutes = []
         # Ask for the name of the cities they will visit (how you will ask for the route if up to you)
@@ -116,21 +109,23 @@ def addDriver():
 
         if nbOfCitiesWillVisit.isdigit():
             for i in range(0, int(nbOfCitiesWillVisit)):
-               # city name validation will be add later 😭
+               #! city name validation will be add later 😭
                city= input(f"City {i + 1} name : ")
                city= city[0].upper() + city[1:].lower()
                driverRoutes.append(city)
         else:
             print("Invalid Input")
 
-        driver_route_dict[formattedDriverFullName] = driverRoutes
-        print(driver_route_dict)
+        dict[formattedDriverFullName] = driverRoutes
+        print(dict)
 
     else:
-        if isDriverFullNameValid == "exist":
-            print(f"{formattedDriverFullName} already exist on the list")
+        formattedDriverFullName = formatDriverFullName(driverFullName)
+
+        if fullNameValidationResult == "exists":
+            print(f"\n{formattedDriverFullName} already exists on the list")
         else:
-            print(isDriverFullNameValid)
+            print(fullNameValidationResult)
             print("\nInvalid Driver Name")
 
 
@@ -145,6 +140,15 @@ def checkDeliverability():
     print("\nChecking For Deliverability")
 
 def Menu():
+    cities = ["Sour", "Saida", "Beirut", "Zahle", "Baalbek"]
+
+    driver_route_dict = {
+    "Ahmad Solyman": ["Sour", "Saida"],
+    "Ali Hussein": ["Zahle"],
+    "Hilal Jomaa": ["Beirut"],
+    "Ali Ali": ["Beirut"],
+}
+
     close_system = False
     while not close_system:
         print("\n     1 - To add a city")
@@ -155,12 +159,12 @@ def Menu():
 
         options = input("\nChoose one of these options : ")
 
-        if options.isdigit() == True and 1 <= int(options) <= 5:
+        if options.isdigit() and 1 <= int(options) <= 5:
             options = int(options)
             if options == 1 :
-                addCity()
+                addCity(cities)
             elif options == 2 :
-                addDriver()
+                addDriver(driver_route_dict)
             elif options == 3 :
                 addCityToDriverRoute()
             elif options == 4 :
@@ -174,7 +178,12 @@ def Menu():
 
 Menu()
 
+# ! Be careful while dealing with these conditions
+# if 0 == False: 
+#     print("HI") 
 
+# if 1 == True:
+#     print("Hi")
 
 #* 1.	To add a city
 #* 2.	To add a driver
