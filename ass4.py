@@ -33,9 +33,34 @@ driver_route_dict = {
     "driver3": ["Beirut"],
 }
 
+# name of the city should be valid if: at least 4 chars, doesn't include any numbers, doesn't exist in the cities list
+def isValidCityName(city):
+    if len(city) < 3:
+        return False
+    
+    for cityNames in cities: # Time Complexity O(N)
+        if city == cityNames.lower():
+            return 0
+    
+    for char in city: # Time Complexity O(N)
+        if char.isdigit():
+            return False
+    
+    return True
 
 def addCity():
-    print("\nAdding City")
+    city = input("\nEnter name of city you wanna add : ")
+    addToCities = isValidCityName(city.lower())
+
+    formattedCityName = city[0].upper() + city[1:].lower() # first letter Capital, rest small letters
+
+    if addToCities:
+        cities.append(formattedCityName)
+    elif addToCities == 0:
+        print(f"{formattedCityName} already exist on the list")
+    else:
+        print("You've entered an invalid city name")
+
 
 def addDriver():
     print("\nAdding Driver")
