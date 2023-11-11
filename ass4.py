@@ -33,9 +33,27 @@ driver_route_dict = {
     "driver3": ["Beirut"],
 }
 
+
+def addCity():
+    print("\nAdding City")
+
+def addDriver():
+    print("\nAdding Driver")
+
+def addCityToDriverRoute():
+    print("\nAdding City To Driver Route")
+
+def removeCityFromDriverRoute():
+    print("\nRemoving City From Driver Route")
+
+
+def checkDeliverability():
+    print("\nChecking For Deliverability")
+
+
+
 def Menu():
     close_system = False
-    
     while not close_system:
         print("\n     1 - To add a city")
         print("     2 - To add a driver")
@@ -43,22 +61,23 @@ def Menu():
         print("     4 - To remove a city from a driver's route")
         print("     5 - To check the deliverability of a package")
 
-        options = int(input("\nChoose one of these options : "))
+        options = input("\nChoose one of these options : ")
 
-        if options == 1 :
-            addCity()
-        elif options == 2 :
-            addDriver()
-        elif options == 3 :
-            addCityToDriverRoute()
-        elif options == 4 :
-            removeCityFromDriverRoute()
-        elif options == 5 :
-            checkDeliverability()
-            close_system = True
+        if options.isdigit() == True and 1 <= int(options) <= 5:
+            options = int(options)
+            if options == 1 :
+                addCity()
+            elif options == 2 :
+                addDriver()
+            elif options == 3 :
+                addCityToDriverRoute()
+            elif options == 4 :
+                removeCityFromDriverRoute()
+            elif options == 5 :
+                checkDeliverability()
+                close_system = True
         else:
-            print("Invalid Input - Try again")
-
+            print("\nInvalid Input You've Should Choose a Number Only Between (1,5) - Try again")
 
 Menu()
     
