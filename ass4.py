@@ -20,10 +20,6 @@
 
 # Good luck and don’t cry too much 😭 :)
 
-### Transportation Company :
-# delivers to cities
-
-# name of the city should be valid if: at least 4 chars, doesn't include any numbers, doesn't exist in the cities list
 def renderUserInterFace():
         print("\n     1 - To add a city")
         print("     2 - To add a driver")
@@ -31,39 +27,61 @@ def renderUserInterFace():
         print("     4 - To remove a city from a driver's route")
         print("     5 - To check the deliverability of a package")
 
-    
-def isValidCityNameList(cities, enteredCity):
-    if len(enteredCity) < 3 or len(enteredCity) > 15:
-        return False
-    
-    for char in enteredCity: # Time Complexity O(N)
-        if char.isdigit():
-            return False
-    
-    for city in cities: # Time Complexity O(N)
-        if enteredCity == city.lower():
-            return "exists"
-        
-    return True
+def renderingInsertingOptions():
+    print("\n     1. To add to the beginning of the route enter 0")
+    print("     2. To add to the end of the route enter -1")
+    print("     3. Any other number to add that city to the given index enter #")
 
 def formatCityName(city):
     return city[0].upper() + city[1:].lower()
 
-def addCity(cities):
-    city = formatCityName(input("\nEnter name of city you wanna add : "))
-    addToCities = isValidCityNameList(cities, city.lower())
+def isCityNameValid(city):
+    if len(city) < 3 or len(city) > 20:
+        return False
+    
+    for char in city: # Time Complexity O(N)
+        if char.isdigit():
+            return False
+    return True
+    
+def isCityNameValidForList(cities, city):
+    if not isCityNameValid(city):
+        return False
+    
+    for cityLi in cities: # Time Complexity O(N)
+        if cityLi == city :
+            return "exists"
+    return True
 
-    print(addToCities)
-    if addToCities == True:
-        cities.append(city)
-    elif addToCities == "exists":
-        print(f"\n{city} already exists on the list")
-    else:
-        print("You've entered an invalid city name")
+def isDriverNameValid(driver):
+    if len(driver) < 6 or len(driver) > 25:
+        return False
 
-    print(cities)
+    for char in driver:
+        if char.isdigit():
+            return False
+        
+    if spaceCount(driver) != 1:
+        return False
+    
+    return True
 
-# name of the city valid if: max chars 26, min 7, doesn't include any numbers, doesn't exist as a key in the driver_route_dict dictionary
+def isDriverNameOnDict(dict, driver):
+    isOnDict = False    
+
+    for name in dict:
+        if name == driver:
+            isOnDict = True
+
+    return isOnDict
+
+def isCityNameOnDict(dict, driver, userCity):
+    isOnList = False
+
+    for city in dict[driver]:
+        if userCity == city:
+            isOnList = True
+    return isOnList
 
 def formatDriverFullName(fullName):
     [firstName, lastName] = fullName.split()
@@ -96,6 +114,19 @@ def isDriverFullNameValid(dict, fullName):
             return "exists" 
     
     return True
+
+def addCity(cities):
+    city = formatCityName(input("\nEnter name of city you wanna add : "))
+    addToCities = isCityNameValidForList(cities, city)
+
+    if addToCities == True:
+        cities.append(city)
+    elif addToCities == "exists":
+        print(f"\n{city} already exists on the list")
+    else:
+        print("You've entered an invalid city name")
+
+    print(cities)
 
 def addDriver(dict):
     driverFullName= input("Enter Driver Full Name : ")
@@ -130,50 +161,6 @@ def addDriver(dict):
             print(fullNameValidationResult)
             print("\nInvalid Driver Name")
 
-def isDriverNameValid(driver):
-    if len(driver) < 6 or len(driver) > 25:
-        return False
-
-    for char in driver:
-        if char.isdigit():
-            return False
-        
-    if spaceCount(driver) != 1:
-        return False
-    
-    return True
-
-
-def isDriverNameOnDict(dict, driver):
-    isOnDict = False    
-
-    for name in dict:
-        if name == driver:
-            isOnDict = True
-
-    return isOnDict
-
-def isCityNameValid(city):
-    if len(city) < 3 or len(city) > 20:
-        return False
-    
-    for char in city: # Time Complexity O(N)
-        if char.isdigit():
-            return False
-        
-    return True
-
-def isCityNameOnDict(dict, driver, userCity):
-    isOnList = False
-    for city in dict[driver]:
-        if userCity == city:
-            isOnList = True
-    return isOnList
-
-def renderingInsertingOptions():
-    print("\n     1. To add to the beginning of the route enter 0")
-    print("     2. To add to the end of the route enter -1")
-    print("     3. Any other number to add that city to the given index enter #")
 
 def addCityToDriverRoute(dict):
     driver = input("Enter Driver Full Name ? ")
@@ -277,8 +264,6 @@ def Menu():
             print("\nInvalid Input You've Should Choose a Number Only Between (1,5) - Try again")
 
 Menu()
-
-
 # ! Be careful while dealing with these conditions
 # if 0 == False: 
 #     print("HI") 
