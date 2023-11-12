@@ -207,7 +207,7 @@ def addCityToDriverRoute(dict):
 
                         if index.isdigit():
                             num = int(index)
-                            if  1 <= num <= len(driverRoutesList) + 1: # 0 inclusive while dealing with lists
+                            if  1 <= num <= len(driverRoutesList) + 1:
                                 driverRoutesList.insert(num - 1, city)
                             else:
                                 print(f"{num} out of range !!!")
