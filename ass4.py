@@ -125,7 +125,7 @@ def isDriverFullNameValid(dict, fullName):
     return True
 
 def addCity(cities):
-    city = input("\nEnter name of city you wanna add : ").strip() # used trip to get rid of any spaces at the beginning/end of inputed string
+    city = input("\nEnter name of city you wanna add : ").strip() # used strip to get rid of any spaces at the beginning/end of inputed string
 
     addToCities = isCityNameValidForList(cities, city.lower()) # check if city name is valid
     
