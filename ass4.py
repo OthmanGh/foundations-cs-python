@@ -35,6 +35,17 @@ def renderingInsertingOptions():
 def formatCityName(city):
     return city[0].upper() + city[1:].lower()
 
+
+def wordCnt(fullName):
+# also should include only 2 words first and last name otherwise error will be generated
+    word_cnt = 1
+    for word in fullName:
+        if ' ' in word:
+            word_cnt+= 1
+
+    return word_cnt
+
+
 def isCityNameValid(city):
     if len(city) < 3 or len(city) > 20:
         return False
@@ -42,14 +53,19 @@ def isCityNameValid(city):
     for char in city: # Time Complexity O(N)
         if char.isdigit():
             return False
+        
+    if wordCnt(city) != 1:
+        return False
+    
     return True
     
 def isCityNameValidForList(cities, city):
+    
     if not isCityNameValid(city):
         return False
     
     for cityLi in cities: # Time Complexity O(N)
-        if cityLi == city :
+        if cityLi.lower() == city :
             return "exists"
     return True
 
@@ -61,7 +77,7 @@ def isDriverNameValid(driver):
         if char.isdigit():
             return False
         
-    if spaceCount(driver) != 1:
+    if wordCnt(driver) != 2:
         return False
     
     return True
@@ -89,14 +105,7 @@ def formatDriverFullName(fullName):
     lastName = lastName[0].upper() + lastName[1:].lower()
     return  firstName + " " + lastName
 
-def spaceCount(fullName):
-# also should include only 2 words first and last name otherwise error will be generated
-    space_cnt = 0
-    for word in fullName:
-        if ' ' in word:
-            space_cnt+= 1
 
-    return space_cnt
 
 def isDriverFullNameValid(dict, fullName):
     if len(fullName) < 6 or len(fullName) > 25:
@@ -106,7 +115,7 @@ def isDriverFullNameValid(dict, fullName):
         if char.isdigit():
             return False
         
-    if spaceCount(fullName) != 1:
+    if wordCnt(fullName) != 2:
         return False
         
     for key in dict: # key == fullName example : ("Ali Ali")
@@ -116,13 +125,16 @@ def isDriverFullNameValid(dict, fullName):
     return True
 
 def addCity(cities):
-    city = formatCityName(input("\nEnter name of city you wanna add : "))
-    addToCities = isCityNameValidForList(cities, city)
+    city = input("\nEnter name of city you wanna add : ").strip() # used trip to get rid of any spaces at the beginning/end of inputed string
+
+    addToCities = isCityNameValidForList(cities, city.lower()) # check if city name is valid
+    
+    formattedCityName = formatCityName(city) # if yes formatted to match other cities on the list
 
     if addToCities == True:
-        cities.append(city)
+        cities.append(formattedCityName)
     elif addToCities == "exists":
-        print(f"\n{city} already exists on the list")
+        print(f"\n{formattedCityName} already exists on the list")
     else:
         print("You've entered an invalid city name")
 
@@ -207,7 +219,7 @@ def addCityToDriverRoute(dict):
 
                         if index.isdigit():
                             num = int(index)
-                            if  1 <= num <= len(driverRoutesList) + 1: # 0 inclusive while dealing with lists
+                            if  1 <= num <= len(driverRoutesList) + 1:
                                 driverRoutesList.insert(num - 1, city)
                             else:
                                 print(f"{num} out of range !!!")
