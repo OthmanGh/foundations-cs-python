@@ -57,6 +57,9 @@ def isCityNameValid(city):
     if wordCnt(city) != 1:
         return False
     
+    if not city.isalnum(): # city must not include any symbol
+        return False
+    
     return True
     
 def isCityNameValidForList(cities, city):
