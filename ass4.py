@@ -28,9 +28,9 @@ def renderUserInterFace():
         print("     5 - To check the deliverability of a package")
 
 def renderInsertOptionsInterFace():
-    print("\n     1. To add to the beginning of the route enter 0")
-    print("     2. To add to the end of the route enter -1")
-    print("     3. Any other number to add that city to the given index enter #")
+    print("\n     1. Add to the beginning of the route enter 0")
+    print("     2. Add to the end of the route enter -1")
+    print("     3. Add that city to the given index enter #")
 
 
 def formatCityName(city):
@@ -176,38 +176,44 @@ def addCityToDriverRoute(dict):
     driver = input("Enter Driver Full Name ? ")
 
     # check if user entered driver name is valid
-    nameValidation = isDriverNameValid(driver)
+    driverValidation = isDriverNameValid(driver)
 
-    if nameValidation:
+    if driverValidation:
         formattedDriverName = formatDriverName(driver)
+
         # check if driver name exists on dict:
         if isDriverOnDict(dict, formattedDriverName):
-            print(f"{formattedDriverName} is on the list")            
+
+            print(f"{formattedDriverName} is on the list")       
+                 
             cityToAdd =  input("Enter name of the city you wanna add to the driver route ? ")            
 
             # check if user entered city name is valid:
             if isCityNameValid(cityToAdd):
+
                 city = formatCityName(cityToAdd)
-                print(f"{city}")
-        
+
                 # check if city already exist on driver route:
                 if isCityNameOnDict(dict, formattedDriverName, city):
                     print(f"{city} already exists on {formattedDriverName} route")
+
                 else:
-                    driverRoutesList = dict[formattedDriverName]
-                    print(driverRoutesList)
+                    
+                    driverRoutesList = dict[formattedDriverName] # copy by reference driver route list
+                    print(f"{formattedDriverName} take this route {driverRoutesList}")
+
                     # give user option to decide at which index city will be add on the list
                     renderInsertOptionsInterFace()
-                    chosenOption = input("\nchoose one the aboved options ? ")
+                    chosenOption = input("\nchoose one of the aboved options ? ")
 
                     if  chosenOption.isdigit() or chosenOption.startswith("-") and chosenOption[1:].isdigit():
                         index = int(chosenOption)
 
                         if  index == 0:
-                            print("Adding to the beginning")
+                            print("Adding to the beginning....")
                             driverRoutesList.insert(0, city) # ! note lists are refrenced data structure types so inserting an elment to the list will affect the actual list of the driver inside the dictionary
                         elif index == -1:
-                            print("Adding to the end...")
+                            print("Adding to the end....")
                             driverRoutesList.append(city)
                         else:
                             print("invalid input")
@@ -217,7 +223,7 @@ def addCityToDriverRoute(dict):
 
                         if index.isdigit():
                             num = int(index)
-                            if  1 <= num <= len(driverRoutesList) + 1:
+                            if  1 <= num <= len(driverRoutesList) + 1: # developers only start counting from zero 😆
                                 driverRoutesList.insert(num - 1, city)
                             else:
                                 print(f"{num} out of range !!!")
@@ -226,13 +232,14 @@ def addCityToDriverRoute(dict):
                     else:
                         print("invalid input")
 
-                    print(dict[formattedDriverName]) 
+                    print(dict[formattedDriverName]) # output driver route list
             else:
                 print("invalid city name !!")
         else:
             print(f"{formattedDriverName} is not on the list")
     else:
         print("invalid driver name")
+
 
 def removeCityFromDriverRoute():
     print("\nRemoving City From Driver Route")
