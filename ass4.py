@@ -78,6 +78,7 @@ def isCityNameValidForList(cities, city):
     for cityLi in cities: # Time Complexity O(N)
         if cityLi.lower() == city :
             return "exists"
+        
     return True
 
 def isDriverNameValid(driver):
@@ -117,7 +118,22 @@ def isCityNameOnDict(dict, driver, userCity):
     return isOnList
 
 
+def removeDriver(dict, driver):
+    print(f"removing {driver} from dict....")
+    del dict[driver]
+
+
+def removeCity(dict, formattedDriverName, cityToDelet):
+    print("Deleting.....")
+    routeList = dict[formattedDriverName]
+    routeList.remove(cityToDelet)
+
+    if len(routeList) == 0:  # remove  driver from dict
+        removeDriver(dict, formattedDriverName)
+
+
 def addCity(cities):
+    
     city = input("\nEnter name of city you wanna add : ").strip() # used strip to get rid of any spaces at the beginning/end of inputed string
 
     addToCities = isCityNameValidForList(cities, city.lower()) # check if city name is valid
@@ -240,9 +256,41 @@ def addCityToDriverRoute(dict):
     else:
         print("invalid driver name")
 
+def removeCityFromDriverRoute(dict):
+    driver = input("Enter Driver Full Name ? ")
+    
+    # check if user entered driver name is valid
+    driverValidation = isDriverNameValid(driver)
 
-def removeCityFromDriverRoute():
-    print("\nRemoving City From Driver Route")
+    if driverValidation:
+        formattedDriverName = formatDriverName(driver)
+
+        # check if driver name exists on dict:
+        if isDriverOnDict(dict, formattedDriverName):
+
+            print(f"{formattedDriverName} is on the list")       
+                 
+            cityToDelete =  input("Enter name of the city you wanna delete from the driver route ? ")            
+
+            # check if user entered city name is valid:
+            if isCityNameValid(cityToDelete):
+
+                city = formatCityName(cityToDelete)
+
+                # check if city do not exist on driver route:
+                if not isCityNameOnDict(dict, formattedDriverName, city):
+                    print(f"{city} is not on driver route")
+
+                else: 
+                    removeCity(dict, formattedDriverName, city)
+                    print(dict)
+            else:
+                print("invalid city name !!")
+        else:
+            print(f"{formattedDriverName} is not on the list")
+    else:
+        print("invalid driver name")
+
 
 def checkDeliverability():
     print("\nChecking For Deliverability")
@@ -273,7 +321,7 @@ def Menu():
             elif options == 3 :
                 addCityToDriverRoute(driver_route_dict)
             elif options == 4 :
-                removeCityFromDriverRoute()
+                removeCityFromDriverRoute(driver_route_dict)
             elif options == 5 :
                 checkDeliverability()
                 close_system = True
@@ -281,11 +329,5 @@ def Menu():
             print("\nInvalid Input You've Should Choose a Number Only Between (1,5) - Try again")
 
 Menu()
-# ! Be careful while dealing with these conditions
-# if 0 == False: 
-#     print("HI") 
-
-# if 1 == True:
-#     print("Hi")
 
 # The insert() method in Python generally inserts the element at any position in the list and also performs the necessary shifts required internally and hence can also be used to perform this very task. source : https://www.geeksforgeeks.org/python-perform-append-at-beginning-of-list/
