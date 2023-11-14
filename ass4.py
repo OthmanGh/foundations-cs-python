@@ -150,6 +150,18 @@ def addCity(cities):
     print("Cities List : ", cities)
 
 
+def checkDriversDeliverability(dict, city):
+    drivers = [] # list will store all the drivers that deliver to city
+    for driver in dict: 
+        if isCityNameOnDict(dict, driver, city):
+            drivers.append(driver)
+
+    if len(drivers) == 0:
+        return None
+    
+    return drivers
+
+
 def addDriver(dict):
     
     driver= input("Enter Driver Full Name : ")
@@ -256,9 +268,10 @@ def addCityToDriverRoute(dict):
     else:
         print("invalid driver name")
 
+
 def removeCityFromDriverRoute(dict):
     driver = input("Enter Driver Full Name ? ")
-    
+
     # check if user entered driver name is valid
     driverValidation = isDriverNameValid(driver)
 
@@ -292,17 +305,31 @@ def removeCityFromDriverRoute(dict):
         print("invalid driver name")
 
 
-def checkDeliverability():
-    print("\nChecking For Deliverability")
+def checkDeliverability(dict):    
+    city = input("name of city you would like to deliver package to? ")
+
+    if isCityNameValid(city): # check if city name is valid
+        city = formatCityName(city)
+
+        drivers = checkDriversDeliverability(dict, city) 
+    else:
+        drivers = -1 # other wise error will generated since drivers won't be initialized
+        print("Invalid city name !!!")
+
+    if drivers == None : 
+        print(f"Unfortunatly for now no driver is delivering packages to {city}")
+    else:
+        if drivers != -1 :
+            print("Available Drivers : ", drivers)
 
 def Menu():
     cities = ["Sour", "Saida", "Beirut", "Zahle", "Baalbek"]
 
     driver_route_dict = {
     "Ahmad Solyman": ["Sour", "Saida", "Zahle"],
-    "Ali Hussein": ["Zahle"],
-    "Hilal Jomaa": ["Beirut"],
-    "Ali Ali": ["Beirut", "Akkar", "Saida"]
+    "Ali Hussein": ["Zahle", "Akkar"],
+    "Hilal Jomaa": ["Beirut", "Zahle"],
+    "Ali Ali": ["Beirut", "Akkar", "Zahle", "Saida"]
 }
 
     close_system = False
@@ -323,7 +350,7 @@ def Menu():
             elif options == 4 :
                 removeCityFromDriverRoute(driver_route_dict)
             elif options == 5 :
-                checkDeliverability()
+                checkDeliverability(driver_route_dict)
                 close_system = True
         else:
             print("\nInvalid Input You've Should Choose a Number Only Between (1,5) - Try again")
@@ -331,3 +358,5 @@ def Menu():
 Menu()
 
 # The insert() method in Python generally inserts the element at any position in the list and also performs the necessary shifts required internally and hence can also be used to perform this very task. source : https://www.geeksforgeeks.org/python-perform-append-at-beginning-of-list/
+
+# Python | Ways to remove a key from dictionary : https://www.geeksforgeeks.org/python-ways-to-remove-a-key-from-dictionary/
