@@ -1,31 +1,10 @@
-#* You are writing a system for a transport company.
-#* This company has a list of cities, and a list of drivers. Each driver has their specific route.
-#* For example, if the route of the driver “Alex” is Beirut, Zahle, it means that he will go to Beirut and then Zahle.
-#* Write a system that repeatedly prompts the user with the following options:
-#* Enter:
-#* 1.	To add a city
-#* 2.	To add a driver
-#* 3.	To add a city to the route of a driver
-#* 4.	Remove a city from a driver’s route
-#* 5.	To check the deliverability of a package
-#* If the user inputs 1, they are asked the name of the city. This name (if valid) is added to the list of cities.
-#* If the user input 2, they are asked the name of the driver and then the name of the cities they will visit (how you will ask for the route if up to you)
-#* If the user inputs 3, they are prompted the name of the driver and then the name of the city to add. If all is well, the user is then given the following options:
-#* Input:
-#* 0.	To add to the beginning of the route
-#* -1. To add to the end of the route
-#* #. (any other number) to add that city to the given index
-#* If the user inputs 4, they are prompted the name of the driver and then the name of the city to delete. If all is well, that city is removed from the route of the driver.
-#* If the user inputs 5, they are asked for the name of the city they would like to deliver the package to if all is well, a list of all the drivers that deliver to this city is shown.
-
-# Good luck and don’t cry too much 😭 :)
-
 def renderUserInterFace():
         print("\n     1 - To add a city")
         print("     2 - To add a driver")
         print("     3 - To add a city to the route of a driver")
         print("     4 - To remove a city from a driver's route")
         print("     5 - To check the deliverability of a package")
+
 
 def renderInsertOptionsInterFace():
     print("\n     1. Add to the beginning of the route enter 0")
@@ -53,6 +32,7 @@ def wordCnt(fullName):
 
     return word_cnt
 
+
 def isCityNameValid(city):
 
     if len(city) < 3 or len(city) > 20:
@@ -69,7 +49,8 @@ def isCityNameValid(city):
         return False
     
     return True
-    
+
+
 def isCityNameValidForList(cities, city):
     
     if not isCityNameValid(city):
@@ -80,6 +61,7 @@ def isCityNameValidForList(cities, city):
             return "exists"
         
     return True
+
 
 def isDriverNameValid(driver):
 
@@ -100,6 +82,7 @@ def isDriverNameValid(driver):
     
     return True
 
+
 def isDriverOnDict(dict, driver):
     isOnDict = False    
 
@@ -108,6 +91,7 @@ def isDriverOnDict(dict, driver):
             isOnDict = True
 
     return isOnDict
+
 
 def isCityNameOnDict(dict, driver, userCity):
     isOnList = False
@@ -118,22 +102,17 @@ def isCityNameOnDict(dict, driver, userCity):
     return isOnList
 
 
-def removeDriver(dict, driver):
-    print(f"removing {driver} from dict....")
-    del dict[driver]
-
-
-def removeCity(dict, formattedDriverName, cityToDelet):
+def removeCity(dict, driver, cityToDelet):
     print("Deleting.....")
-    routeList = dict[formattedDriverName]
+    routeList = dict[driver]
     routeList.remove(cityToDelet)
 
-    if len(routeList) == 0:  # remove  driver from dict
-        removeDriver(dict, formattedDriverName)
+    if len(routeList) == 0:  # remove driver from dict
+        print(f"removing {driver} from dict....")
+        del dict[driver]
 
 
 def addCity(cities):
-    
     city = input("\nEnter name of city you wanna add : ").strip() # used strip to get rid of any spaces at the beginning/end of inputed string
 
     addToCities = isCityNameValidForList(cities, city.lower()) # check if city name is valid
@@ -150,6 +129,49 @@ def addCity(cities):
     print("Cities List : ", cities)
 
 
+def driverValidation(): # almost every function do same work at first so this function will do it for us and prevent repitive code
+
+    driver= input("Enter Driver Full Name : ")
+
+    # check if user entered driver name is valid
+    isValid = isDriverNameValid(driver)
+
+    if isValid == True:
+        formattedDriverName = formatDriverName(driver)
+        return formattedDriverName
+
+    else:
+        print("invalid driver name !!!")
+        return -1
+
+
+def validationAddRemoveData(dict, num = 0): # this function will check for inputs validation for both addCityToDriverRoute/removeCityFromDriverRoute functions, purpose is to decrease the amount of repetitive code
+
+    driver = driverValidation()    
+
+    if driver != -1:
+        # check if driver name exists on dict:
+        if isDriverOnDict(dict, driver):
+
+            print(f"{driver} is on the list")   
+
+            if num == 1:
+                city = input("Enter name of the city you wanna add to the driver route ? ")
+            else:
+                city = input("Enter name of the city you wanna delete from the driver route ? ")
+
+            if isCityNameValid(city):
+                cityFormat = formatCityName(city)
+
+                return driver, cityFormat # will return a tuple
+            else:
+                print("invalid city name")
+                return (-1, -1)
+        else:
+            print(f"{driver} is not on the list")
+            return (-1,-1)
+    
+
 def checkDriversDeliverability(dict, city):
     drivers = [] # list will store all the drivers that deliver to city
     for driver in dict: 
@@ -163,16 +185,10 @@ def checkDriversDeliverability(dict, city):
 
 
 def addDriver(dict):
+    driver = driverValidation()
     
-    driver= input("Enter Driver Full Name : ")
-
-    driverValidation = isDriverNameValid(driver) # Check if driver name is valid
-
-    if driverValidation == True:
-
-        formattedDriverName = formatDriverName(driver)
-
-        if not isDriverOnDict(dict, formattedDriverName):  # Check if Driver already exist on our list: 
+    if driver != -1:
+        if not isDriverOnDict(dict, driver):  # Check if Driver already exist on our list: 
 
             driverRoutes = []             
             nbOfCitiesWillRoute = input("How many cities will driver route ? ")
@@ -191,118 +207,74 @@ def addDriver(dict):
                     print("only natural number must be entered {0} - execlusive")
 
             if int(nbOfCitiesWillRoute) >= 1: # if not an empty list will be added within the driver name
-                dict[formattedDriverName] = driverRoutes
-
+                dict[driver] = driverRoutes
             print(dict)
         else:
-            print(f"{formattedDriverName} already exist on the list")
-    else:
-        print("invalid driver name !!!")
+            print(f"{driver} already exist on the list")
 
 
 def addCityToDriverRoute(dict):
-    driver = input("Enter Driver Full Name ? ")
+    (driver, city) = validationAddRemoveData(dict, 1)
 
-    # check if user entered driver name is valid
-    driverValidation = isDriverNameValid(driver)
+    if driver != -1 and city != -1:
 
-    if driverValidation:
-        formattedDriverName = formatDriverName(driver)
+        # check if city already exist on driver route:
+        if isCityNameOnDict(dict, driver, city):
+            print(f"{city} already exists on {driver} route")
 
-        # check if driver name exists on dict:
-        if isDriverOnDict(dict, formattedDriverName):
-
-            print(f"{formattedDriverName} is on the list")       
-                 
-            cityToAdd =  input("Enter name of the city you wanna add to the driver route ? ")            
-
-            # check if user entered city name is valid:
-            if isCityNameValid(cityToAdd):
-
-                city = formatCityName(cityToAdd)
-
-                # check if city already exist on driver route:
-                if isCityNameOnDict(dict, formattedDriverName, city):
-                    print(f"{city} already exists on {formattedDriverName} route")
-
-                else:
-                    
-                    driverRoutesList = dict[formattedDriverName] # copy by reference driver route list
-                    print(f"{formattedDriverName} take this route {driverRoutesList}")
-
-                    # give user option to decide at which index city will be add on the list
-                    renderInsertOptionsInterFace()
-                    chosenOption = input("\nchoose one of the aboved options ? ")
-
-                    if  chosenOption.isdigit() or chosenOption.startswith("-") and chosenOption[1:].isdigit():
-                        index = int(chosenOption)
-
-                        if  index == 0:
-                            print("Adding to the beginning....")
-                            driverRoutesList.insert(0, city) # ! note lists are refrenced data structure types so inserting an elment to the list will affect the actual list of the driver inside the dictionary
-                        elif index == -1:
-                            print("Adding to the end....")
-                            driverRoutesList.append(city)
-                        else:
-                            print("invalid input")
-
-                    elif chosenOption == "#":
-                        index = input("Enter position where you wanna add city ? ")
-
-                        if index.isdigit():
-                            num = int(index)
-                            if  1 <= num <= len(driverRoutesList) + 1: # developers only start counting from zero 😆
-                                driverRoutesList.insert(num - 1, city)
-                            else:
-                                print(f"{num} out of range !!!")
-                        else:
-                            print("a valid number must be entered !")
-                    else:
-                        print("invalid input")
-
-                    print(dict[formattedDriverName]) # output driver route list
-            else:
-                print("invalid city name !!")
         else:
-            print(f"{formattedDriverName} is not on the list")
-    else:
-        print("invalid driver name")
+            driverRoutesList = dict[driver] # copy by reference driver route list
+            print(f"{driver} takes this route {driverRoutesList}")
+
+            # give user options to decide at which index city will be add to the list
+            renderInsertOptionsInterFace()
+            chosenOption = input("\nchoose one of the aboved options ? ")
+
+            if chosenOption.isdigit() or chosenOption.startswith("-") and chosenOption[1:].isdigit():
+               index = int(chosenOption)
+
+               if  index == 0:
+                    print("Adding to the beginning....")
+                    driverRoutesList.insert(0, city)
+                    print(dict[driver])
+
+               elif index == -1:
+                    print("Adding to the end....")
+                    driverRoutesList.append(city)
+                    print(dict[driver])
+
+               else:
+                    print("invalid input")
+
+            elif chosenOption == "#":
+               index = input("Enter position where you wanna add city ? ")
+
+               if index.isdigit():
+                    num = int(index)
+
+                    if  1 <= num <= len(driverRoutesList) + 1:
+                        driverRoutesList.insert(num - 1, city)  # developers only start counting from zero 😆
+                        print(dict[driver])
+
+                    else:
+                        print(f"{num} out of range !!!")
+               else:
+                    print("a valid number must be entered !")
+            else:
+                print("invalid input")
 
 
 def removeCityFromDriverRoute(dict):
-    driver = input("Enter Driver Full Name ? ")
+    driver, cityToDelete = validationAddRemoveData(dict)
 
-    # check if user entered driver name is valid
-    driverValidation = isDriverNameValid(driver)
+    if driver != -1 and cityToDelete != -1:
+        # check if city do not exist on driver route:
+        if not isCityNameOnDict(dict, driver, cityToDelete):
+            print(f"{cityToDelete} is not on driver route")
 
-    if driverValidation:
-        formattedDriverName = formatDriverName(driver)
-
-        # check if driver name exists on dict:
-        if isDriverOnDict(dict, formattedDriverName):
-
-            print(f"{formattedDriverName} is on the list")       
-                 
-            cityToDelete =  input("Enter name of the city you wanna delete from the driver route ? ")            
-
-            # check if user entered city name is valid:
-            if isCityNameValid(cityToDelete):
-
-                city = formatCityName(cityToDelete)
-
-                # check if city do not exist on driver route:
-                if not isCityNameOnDict(dict, formattedDriverName, city):
-                    print(f"{city} is not on driver route")
-
-                else: 
-                    removeCity(dict, formattedDriverName, city)
-                    print(dict)
-            else:
-                print("invalid city name !!")
-        else:
-            print(f"{formattedDriverName} is not on the list")
-    else:
-        print("invalid driver name")
+        else: 
+            removeCity(dict, driver, cityToDelete)
+            print(dict)
 
 
 def checkDeliverability(dict):    
@@ -310,17 +282,19 @@ def checkDeliverability(dict):
 
     if isCityNameValid(city): # check if city name is valid
         city = formatCityName(city)
-
         drivers = checkDriversDeliverability(dict, city) 
+
     else:
         drivers = -1 # other wise error will generated since drivers won't be initialized
         print("Invalid city name !!!")
 
     if drivers == None : 
         print(f"Unfortunatly for now no driver is delivering packages to {city}")
+
     else:
         if drivers != -1 :
             print("Available Drivers : ", drivers)
+
 
 def Menu():
     cities = ["Sour", "Saida", "Beirut", "Zahle", "Baalbek"]
@@ -331,10 +305,10 @@ def Menu():
     "Hilal Jomaa": ["Beirut", "Zahle"],
     "Ali Ali": ["Beirut", "Akkar", "Zahle", "Saida"]
 }
-
+    
     close_system = False
-    while not close_system:
 
+    while not close_system:
         renderUserInterFace()
 
         options = input("\nChoose one of these options : ")
@@ -356,6 +330,30 @@ def Menu():
             print("\nInvalid Input You've Should Choose a Number Only Between (1,5) - Try again")
 
 Menu()
+
+
+#* You are writing a system for a transport company.
+#* This company has a list of cities, and a list of drivers. Each driver has their specific route.
+#* For example, if the route of the driver “Alex” is Beirut, Zahle, it means that he will go to Beirut and then Zahle.
+#* Write a system that repeatedly prompts the user with the following options:
+#* Enter:
+#* 1.	To add a city
+#* 2.	To add a driver
+#* 3.	To add a city to the route of a driver
+#* 4.	Remove a city from a driver’s route
+#* 5.	To check the deliverability of a package
+#* If the user inputs 1, they are asked the name of the city. This name (if valid) is added to the list of cities.
+#* If the user input 2, they are asked the name of the driver and then the name of the cities they will visit (how you will ask for the route if up to you)
+#* If the user inputs 3, they are prompted the name of the driver and then the name of the city to add. If all is well, the user is then given the following options:
+#* Input:
+#* 0.	To add to the beginning of the route
+#* -1. To add to the end of the route
+#* #. (any other number) to add that city to the given index
+#* If the user inputs 4, they are prompted the name of the driver and then the name of the city to delete. If all is well, that city is removed from the route of the driver.
+#* If the user inputs 5, they are asked for the name of the city they would like to deliver the package to if all is well, a list of all the drivers that deliver to this city is shown.
+
+# Good luck and don’t cry too much 😭 :)
+
 
 # The insert() method in Python generally inserts the element at any position in the list and also performs the necessary shifts required internally and hence can also be used to perform this very task. source : https://www.geeksforgeeks.org/python-perform-append-at-beginning-of-list/
 
