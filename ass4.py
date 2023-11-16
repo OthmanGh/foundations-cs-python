@@ -68,16 +68,15 @@ def isCityNameValid(city):
     return True
 
 
-#! I have to re-modifiy this function
 def isCityOnList(cities, city):
     
     for cityLi in cities: # Time Complexity O(N)
         if cityLi.lower() == city.lower() :
             return True
         
-    return False
 
-
+# function --> isDriverNameValid : will check if driver name valid based on the terms below
+# params --> driver : driver name
 def isDriverNameValid(driver):
 
     if len(driver) < 6 or len(driver) > 25:
@@ -90,9 +89,9 @@ def isDriverNameValid(driver):
     if len(driver.split()) != 2: # drive must have first && last name
         return False
 
-    # driver first or last name may include special characters so we have to check that too
+    # driver first or last name may contain special characters so we have to check that too
     [firstName, lastName] = driver.split()
-    if not firstName.isalnum() or not lastName.isalnum(): #! spaces doesn't considered as alnum characters, this will prevent having speical character in driver name
+    if not firstName.isalnum() or not lastName.isalnum(): #! spaces doesn't considered as alnum characters, this will prevent having speical character in driver name alpha-numeric[0-9, a-z]
         return False
     
     return True
@@ -106,6 +105,7 @@ def isDriverOnDict(dict, driver):
             isOnDict = True
 
     return isOnDict
+
 
 
 def isCityNameOnDict(dict, driver, userCity):
@@ -143,7 +143,7 @@ def driverValidation(): # almost every function do same work at first so this fu
         return -1
 
 
-def validationAddRemoveData(dict, num = 0): # this function will check for inputs validation for both addCityToDriverRoute/removeCityFromDriverRoute functions, purpose is to decrease the amount of repetitive code
+def validationAddRemoveData(dict, num = 0): # this function will check inputs validation for both addCityToDriverRoute/removeCityFromDriverRoute functions, purpose is to decrease the amount of repetitive code
 
     driver = driverValidation()    
 
@@ -164,11 +164,11 @@ def validationAddRemoveData(dict, num = 0): # this function will check for input
                 return driver, cityFormat # will return a tuple
             else:
                 print("invalid city name")
-                return (-1, -1)
+                
         else:
             print(f"{driver} is not on the list")
-            return (-1,-1)
-        
+
+    return (-1, -1)    
 
 def getDriversDeliverability(dict, city):
     drivers = [] # list will store all the drivers that deliver to city
@@ -180,7 +180,6 @@ def getDriversDeliverability(dict, city):
         return None
     
     return drivers
-
 
 # parameter : list of cities
 def addCity(cities):
@@ -203,36 +202,51 @@ def addCity(cities):
             print("invalid city name")
 
 
-def addDriver(dict):
-    driver = driverValidation()
+# function --> addDriver : will add drivers and cities attached to them to main dict 
+# param 1 --> dict : our dictionary
+# param 2 --> cities : main list of cities
+
+def addDriver(dict, cities):
+    driver = driverValidation() # handle driver
     
     if driver != -1:
-        if not isDriverOnDict(dict, driver):  # Check if Driver already exist on our list: 
+        # param 1 : dict which containes all our drivers data attached with their cities lists
+        # param 2 : driver that will be add to dict if don't already exist 
+        if not isDriverOnDict(dict, driver):  # Check if Driver already exist on dict: 
 
-            driverRoutes = []             
+            driverRoutes = []
             nbOfCitiesWillRoute = input("How many cities will driver route ? ").strip()
+            addToDict = True
 
-            if nbOfCitiesWillRoute.isdigit() and int(nbOfCitiesWillRoute) >= 1:
-                
+            # nbOfCities must be greater than 1 obviously user start counting from 1
+            if not nbOfCitiesWillRoute.isdigit():
+                    print("only natural number must be entered {0} - execlusive")
+    
+            else:
+                if int(nbOfCitiesWillRoute) >= 1:
                     for i in range(0, int(nbOfCitiesWillRoute)):
                         
                         city= input(f"City {i + 1} name : ").strip()
 
-                        if isCityNameValid(city):
+                        if isCityNameValid(city) and isCityOnList(cities, city) and not isCityOnList(driverRoutes, city):
                             driverRoutes.append(formatCityName(city))
+                        elif isCityOnList(driverRoutes, city):
+                            print("invalid input - you can't add same city name twice")
+                            addToDict = False
                         else:
-                            print("invalid city name") # only valid city names will be  added to the list
-            else:
-                    print("only natural number must be entered {0} - execlusive")
+                            print("make sure you've entered a valid city name and it's exists on our main list")
+                            addToDict = False
+                            break 
 
-            if int(nbOfCitiesWillRoute) >= 1: # if not an empty list will be added within the driver name
-                dict[driver] = driverRoutes
-            print(dict)
+                if int(nbOfCitiesWillRoute) >= 1 and addToDict: # if user enterd cities are valid then data will be added to dictionary
+                    dict[driver] = driverRoutes
+                    print(dict)
         else:
             print(f"{driver} already exist on the list")
 
 
 def addCityToDriverRoute(dict):
+
     (driver, city) = validationAddRemoveData(dict, 1)
 
     if driver != -1 and city != -1:
@@ -337,7 +351,7 @@ def Menu():
             if options == 1 :
                 addCity(cities)
             elif options == 2 :
-                addDriver(driver_route_dict)
+                addDriver(driver_route_dict, cities)
             elif options == 3 :
                 addCityToDriverRoute(driver_route_dict)
             elif options == 4 :
