@@ -68,16 +68,14 @@ def isCityNameValid(city):
     return True
 
 
-def isCityNameValidForList(cities, city):
-    
-    if not isCityNameValid(city):
-        return False
+#! I have to re-modifiy this function
+def isCityOnList(cities, city):
     
     for cityLi in cities: # Time Complexity O(N)
-        if cityLi.lower() == city :
-            return "exists"
+        if cityLi.lower() == city.lower() :
+            return True
         
-    return True
+    return False
 
 
 def isDriverNameValid(driver):
@@ -184,21 +182,25 @@ def getDriversDeliverability(dict, city):
     return drivers
 
 
+# parameter : list of cities
 def addCity(cities):
     city = input("\nEnter name of city you wanna add : ").strip() # used strip to get rid of any spaces at the beginning/end of inputed string
 
-    addToCities = isCityNameValidForList(cities, city.lower()) # check if city name is valid
-    
-    formattedCityName = formatCityName(city) # format city name to match other cities on the list
+    # parameter 1 : list of main cities list, 
+    # parameter 2 : user entered city name
 
-    if addToCities == True:
-        cities.append(formattedCityName)
-    elif addToCities == "exists":
-        print(f"\n{formattedCityName} already exists on the list")
+    if isCityOnList(cities, city) :  # check if entered city name already exists on cities list
+        print(f"{formatCityName(city)} already exists on main list")
+
     else:
-        print("invalid city name")
+        addToCities = isCityNameValid(city)
 
-    print("Cities List : ", cities)
+        if addToCities:
+            formattedCityName = formatCityName(city)
+            cities.append(formattedCityName)
+            print(cities)
+        else:
+            print("invalid city name")
 
 
 def addDriver(dict):
