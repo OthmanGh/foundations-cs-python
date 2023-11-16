@@ -40,7 +40,7 @@ def renderInsertOptionsInterFace():
 
 
 def formatCityName(city):
-    return city[0].upper() + city[1:].lower()
+    return city[0].upper() + city[1:].lower() 
 
 
 def formatDriverName(fullName):
@@ -50,16 +50,16 @@ def formatDriverName(fullName):
     return  firstName + " " + lastName
 
 
+# Function --> isCityNameValid : check if city name valid based on condition below
 def isCityNameValid(city):
-
     if len(city) < 3 or len(city) > 20:
         return False
     
-    for char in city: # Time Complexity O(N)
+    for char in city:  # shouldn't include any numbers
         if char.isdigit():
             return False
         
-    if len(city.split()) != 1:
+    if len(city.split()) != 1: # city must be only one words
         return False
     
     if not city.isalnum(): # city must not include any symbol
@@ -67,56 +67,42 @@ def isCityNameValid(city):
     
     return True
 
-
+# Function --> isCityOnList : check if city exist on cities list return true if yes otherwise false
 def isCityOnList(cities, city):
-    
-    for cityLi in cities: # Time Complexity O(N)
-        if cityLi.lower() == city.lower() :
-            return True
-        
+    city = formatCityName(city)
+    return city in cities
 
-# function --> isDriverNameValid : will check if driver name valid based on the terms below
-# params --> driver : driver name
+
+# Function --> isDriverNameValid : will check if driver name valid based on the terms below
 def isDriverNameValid(driver):
-
     if len(driver) < 6 or len(driver) > 25:
         return False
 
-    for char in driver: # numbers aren't allowed in driver name
+    for char in driver: # Numbers aren't allowed in driver name
         if char.isdigit():
             return False
         
-    if len(driver.split()) != 2: # drive must have first && last name
+    if len(driver.split()) != 2: # Driver must have first && last name
         return False
 
-    # driver first or last name may contain special characters so we have to check that too
+    # Driver first or last name may contain special characters so we have to check that too
     [firstName, lastName] = driver.split()
-    if not firstName.isalnum() or not lastName.isalnum(): #! spaces doesn't considered as alnum characters, this will prevent having speical character in driver name alpha-numeric[0-9, a-z]
+    if not firstName.isalnum() or not lastName.isalnum(): #! Spaces doesn't considered as alnum characters, this will prevent having speical character in driver name alpha-numeric[0-9, a-z]
         return False
     
     return True
 
-
+# Function --> isDriverOnDict : return true if driver on dictonary otherwise false
 def isDriverOnDict(dict, driver):
-    isOnDict = False    
+    return driver in dict
 
-    for name in dict:
-        if name == driver:
-            isOnDict = True
-
-    return isOnDict
-
-
-
+# Function --> isCityNameOnDict : return true if driver on dictonary otherwise false
 def isCityNameOnDict(dict, driver, userCity):
-    isOnList = False
-
-    for city in dict[driver]:
-        if userCity == city:
-            isOnList = True
-    return isOnList
+    return userCity in dict[driver]
 
 
+# Function --> removeCity : this function will remove a city from driver route and if driver has no city left to route his data will be removed too
+# param --> cityToDelete : city that will be delete
 def removeCity(dict, driver, cityToDelet):
     print("Deleting.....")
     routeList = dict[driver]
@@ -127,24 +113,19 @@ def removeCity(dict, driver, cityToDelet):
         del dict[driver]
 
 
-def driverValidation(): # almost every function do same work at first so this function will do it for us and prevent repitive code
-
+# Function --> driverValidation :  almost every function do same work at first (2,3,4) so this function will do it for us and prevent repitive code
+def driverValidation():
     driver= input("Enter Driver Full Name : ").strip()
 
     # check if user entered driver name is valid
-    isValid = isDriverNameValid(driver)
+    isValid = isDriverNameValid(driver) # will return true or false
 
-    if isValid:
-        formattedDriverName = formatDriverName(driver)
-        return formattedDriverName
-
-    else:
-        print("invalid driver name !!!")
-        return -1
+    return formatDriverName(driver) if isValid else -1 # ternary operator
 
 
-def validationAddRemoveData(dict, num = 0): # this function will check inputs validation for both addCityToDriverRoute/removeCityFromDriverRoute functions, purpose is to decrease the amount of repetitive code
-
+# function --> validationAddRemoveData : check inputs validation for both addCityToDriverRoute/removeCityFromDriverRoute functions
+# param 2 --> num : num parameter will decide which output statment will be printed for 2 different functions, if no parameter passed 0 will be set as a default parameter
+def validationAddRemoveData(dict, num = 0):
     driver = driverValidation()    
 
     if driver != -1:
@@ -167,9 +148,13 @@ def validationAddRemoveData(dict, num = 0): # this function will check inputs va
                 
         else:
             print(f"{driver} is not on the list")
+    else:
+        print("invalid driver name !!!")
 
-    return (-1, -1)    
+    return (-1, -1)
 
+
+# function --> getDriversDeliverability : checks for the deliverability of a certain city and returns a list of drivers that pass through that city. if no driver reach specified city None will be returned
 def getDriversDeliverability(dict, city):
     drivers = [] # list will store all the drivers that deliver to city
     for driver in dict: 
@@ -181,152 +166,187 @@ def getDriversDeliverability(dict, city):
     
     return drivers
 
-# parameter : list of cities
+
+# function --> addCity will add city to cities main lists
+# parameter --> cities : list of cities
 def addCity(cities):
+
+    # Input a city name from a user
     city = input("\nEnter name of city you wanna add : ").strip() # used strip to get rid of any spaces at the beginning/end of inputed string
 
-    # parameter 1 : list of main cities list, 
-    # parameter 2 : user entered city name
-
-    if isCityOnList(cities, city) :  # check if entered city name already exists on cities list
+    # Check if city exists on the list
+    if isCityOnList(cities, city) :
         print(f"{formatCityName(city)} already exists on main list")
-
+        
     else:
+        # Check if city is valid
         addToCities = isCityNameValid(city)
 
         if addToCities:
+
+            # Before adding city reformat it to match rest of cities
             formattedCityName = formatCityName(city)
+            
+            # Add city to cities main list
             cities.append(formattedCityName)
             print(cities)
         else:
             print("invalid city name")
 
 
-# function --> addDriver : will add drivers and cities attached to them to main dict 
-# param 1 --> dict : our dictionary
-# param 2 --> cities : main list of cities
-
+# # Function to add a driver attached to a list of cities will route to dictionary
 def addDriver(dict, cities):
-    driver = driverValidation() # handle driver
-    
-    if driver != -1:
-        # param 1 : dict which containes all our drivers data attached with their cities lists
-        # param 2 : driver that will be add to dict if don't already exist 
-        if not isDriverOnDict(dict, driver):  # Check if Driver already exist on dict: 
 
-            driverRoutes = []
-            nbOfCitiesWillRoute = input("How many cities will driver route ? ").strip()
+    # Validate and get the driver name
+    driver = driverValidation()
+    
+    # Check if driver is valid
+    if driver != -1:
+
+        # Check if driver don't exists on dictionary
+        if not isDriverOnDict(dict, driver):
+
+            driverRoutes = [] # Driver's route list
+            nbOfCitiesWillRoute = input("How many cities will driver route ? ").strip() 
             addToDict = True
 
-            # nbOfCities must be greater than 1 obviously user start counting from 1
+            # Check if number of cities not valid
             if not nbOfCitiesWillRoute.isdigit():
                     print("only natural number must be entered {0} - execlusive")
     
             else:
+                # Check if number of cities greater or equal 1
                 if int(nbOfCitiesWillRoute) >= 1:
+
+                    # Loop starting from zero to number of cities execlusive
                     for i in range(0, int(nbOfCitiesWillRoute)):
                         
+                        # Get city name from user
                         city= input(f"City {i + 1} name : ").strip()
 
+                        # Check if city name is valid and in main cities list and not in driver's cities list 
                         if isCityNameValid(city) and isCityOnList(cities, city) and not isCityOnList(driverRoutes, city):
                             driverRoutes.append(formatCityName(city))
+
+                        # Check if city name in driver's cities list
                         elif isCityOnList(driverRoutes, city):
                             print("invalid input - you can't add same city name twice")
                             addToDict = False
+                            break
                         else:
                             print("make sure you've entered a valid city name and it's exists on our main list")
                             addToDict = False
                             break 
-
-                if int(nbOfCitiesWillRoute) >= 1 and addToDict: # if user enterd cities are valid then data will be added to dictionary
+                
+                # Check if user entered data must be added to dictionary, note in case user enters 0 as number of cities a driver attached to an empty list will be added to the dictionary to prevent that it has to be at least 1
+                if int(nbOfCitiesWillRoute) >= 1 and addToDict: 
                     dict[driver] = driverRoutes
                     print(dict)
         else:
             print(f"{driver} already exist on the list")
 
 
+# Function to add a city to the route of a driver in the given dictionary
 def addCityToDriverRoute(dict):
-
+    # Validate and get the driver and city inputs
     (driver, city) = validationAddRemoveData(dict, 1)
 
+    # Check if both driver and city are valid
     if driver != -1 and city != -1:
 
-        # check if city already exist on driver route:
+        # Check if the city already exists on the driver's route
         if isCityNameOnDict(dict, driver, city):
-            print(f"{city} already exists on {driver} route")
+            print(f"{city} already exists on {driver}'s route")
 
         else:
-            driverRoutesList = dict[driver] # copy by reference driver route list
+            # Get the driver's current route list
+            driverRoutesList = dict[driver]
+
+            # Display the current route of the driver
             print(f"{driver} takes this route {driverRoutesList}")
 
-            # give user options to decide at which index city will be add to the list
+            # Display options for the user to choose where to add the city in the route
             renderInsertOptionsInterFace()
-            chosenOption = input("\nchoose one of the aboved options ? ").strip()
+            chosenOption = input("\nChoose one of the above options? ").strip()
 
+            # Check user input for the index to add the city
             if chosenOption.isdigit() or chosenOption.startswith("-") and chosenOption[1:].isdigit():
-               index = int(chosenOption)
+                index = int(chosenOption)
 
-               if  index == 0:
+                # Add the city to the beginning of the route
+                if index == 0:
                     print("Adding to the beginning....")
                     driverRoutesList.insert(0, city)
                     print(dict[driver])
 
-               elif index == -1:
+                # Add the city to the end of the route
+                elif index == -1:
                     print("Adding to the end....")
                     driverRoutesList.append(city)
                     print(dict[driver])
 
-               else:
-                    print("invalid input")
+                else:
+                    print("Invalid input")
 
+            # Check if the user chose to enter a specific position for the city in the route
             elif chosenOption == "#":
-               index = input("Enter position where you wanna add city ? ").strip()
+                index = input("Enter the position where you want to add the city? ").strip()
 
-               if index.isdigit():
+                # Check if the entered position is a valid number
+                if index.isdigit():
                     num = int(index)
 
-                    if  1 <= num <= len(driverRoutesList) + 1:
+                    # Add the city to the specified position in the route
+                    if 1 <= num <= len(driverRoutesList) + 1:
                         driverRoutesList.insert(num - 1, city)
                         print(dict[driver])
 
                     else:
                         print(f"{num} out of range !!!")
-               else:
-                    print("a valid number must be entered !")
+
+                else:
+                    print("A valid number must be entered!")
+
             else:
-                print("invalid input")
+                print("Invalid input")
 
 
+# Function to remove a city from a driver's route
 def removeCityFromDriverRoute(dict):
+    # Recieve a driver and city data
     driver, cityToDelete = validationAddRemoveData(dict)
 
+    # Check if recieved data are valid
     if driver != -1 and cityToDelete != -1:
-        # check if city do not exist on driver route:
-        if not isCityNameOnDict(dict, driver, cityToDelete):
-            print(f"{cityToDelete} is not on driver route")
 
-        else: 
+        # Check if city do not exist on driver's route:
+        if not isCityNameOnDict(dict, driver, cityToDelete):
+            print(f"{cityToDelete} is not in driver route")
+
+        else:
+            # Remove city from driver's route
             removeCity(dict, driver, cityToDelete)
             print(dict)
 
 
-def deliverability(dict):    
+# Function to check for available deliverability for a certain city
+def deliverability(dict):
     city = input("name of city you would like to deliver package to? ").strip()
 
-    if isCityNameValid(city): # check if city name is valid
+    # Check if city is valid
+    if isCityNameValid(city): 
+        # Format city
         city = formatCityName(city)
+        # Get list of drivers that route through city
         drivers = getDriversDeliverability(dict, city) 
-
     else:
-        drivers = -1 # other wise error will generated since drivers won't be initialized
+        drivers = -1  # Otherwise an error will generated since drivers won't be accessible (not initialized)
         print("Invalid city name !!!")
 
     if drivers == None : 
-        print(f"Unfortunatly for now no driver is delivering packages to {city}")
-
-    else:
-        if drivers != -1 :
-            print("Available Drivers : ", drivers)
+        print(f"Unfortunatly no driver is delivering packages to {city}")
+    elif drivers != -1 :
+        print("Available Drivers : ", drivers)
 
 
 def Menu():
