@@ -39,7 +39,10 @@
 # An input =0 would delete the head of the LL: 12
 # An input =3 would delete the node containing 11
 
-
+class Node :
+    def __init__(self, value, next):
+        self.data = value
+        self.next = next
 
 
 
