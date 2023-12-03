@@ -107,15 +107,32 @@ class LinkedList:
             self.length +=1   # update list length val
 
 
-        # *  Implementation of deleting nodes at the beginning, ending && pos : 
+    # *  Implementation of deleting nodes at the beginning, ending && pos : 
     
-    def pop_front(self):
+    def pop_front(self): # This func takes Constant time O(1)
         if self.head == None:
             print("List is empty....")
 
         else:
             self.head = self.head.next
             self.length -= 1
+
+    def pop_back(self): # This func takes Linear time O(n)
+        if self.head == None:
+            print("List is empty....")
+
+        else:
+            temp =self.head
+
+            while temp.next.next != None: # 
+                temp = temp.next
+
+            temp.next = None
+            self.tail = temp
+            self.length -= 1
+
+
+    # * Printing Linked List Func : 
 
     def printLL(self):
         # Check if list is empty : 
@@ -142,6 +159,9 @@ myList.insert(3, 60)
 myList.insert(4, 70)
 
 myList.pop_front()
+myList.pop_back()
+myList.pop_back()
+
 myList.printLL()
 
 
