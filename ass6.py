@@ -155,8 +155,6 @@ class LinkedList:
             self.length -= 1
 
 
-
-
     # * Printing Linked List Func : 
 
     def printLL(self):
@@ -172,22 +170,31 @@ class LinkedList:
             print("None")
             print("Length of list : ", self.length)
 
-
 myList = LinkedList()
-myList.push_front(30)
-myList.push_back(40)
-myList.push_front(20)
-myList.push_back(50)
-myList.push_front(10)
-
-myList.insert(3, 60)
-myList.insert(4, 70)
-
-myList.pop_front()
-myList.pop_back()
-myList.pop_back()
-myList.pop(2)
+myList.push_front(12)
+myList.push_back(11)
+myList.insert(1, 56)
+myList.insert(2, 76)
 myList.printLL()
+
+#myList.pop(0)
+myList.pop(3) # node containing 11 deleted
+myList.printLL()
+
+# myList.push_front(30)
+# myList.push_back(40)
+# myList.push_front(20)
+# myList.push_back(50)
+# myList.push_front(10)
+
+# myList.insert(3, 60)
+# myList.insert(4, 70)
+
+# myList.pop_front()
+# myList.pop_back()
+# myList.pop_back()
+# myList.pop(2)
+# myList.printLL()
 
 
 #* 4 : 
