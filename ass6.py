@@ -84,6 +84,7 @@ class LinkedList:
     def insert(self, pos, value):
         if pos < 0 or pos > self.length: # If pos val out of range
             print("invalid index value")
+            return
 
         if pos == 0: # add at the beginning 
             self.push_front(value)
@@ -96,7 +97,7 @@ class LinkedList:
             n = Node(value, None) # Create a new node with the given value and a None next pointer
             counter = 0
 
-            while(counter < pos - 1): # Traverse the list until reaching the node before the specified position
+            while(counter < pos - 1): # Traverse the list until reaching the node before targeted position
                 temp = temp.next
                 counter += 1            
             
@@ -124,12 +125,36 @@ class LinkedList:
         else:
             temp =self.head
 
-            while temp.next.next != None: # 
+            while temp.next.next != None: # Travers the list until reaching the node before targeted position
                 temp = temp.next
 
             temp.next = None
             self.tail = temp
             self.length -= 1
+
+
+    def pop(self, pos):
+        if pos < 0 or pos >= self.length: # If pos val out of range
+            print("invalid index value")
+            return
+        
+        if pos == 0:
+            self.pop_front()
+        elif pos == self.length - 1:
+            self.pop_back()
+        
+        else:
+            temp = self.head
+            counter = 0
+
+            while(counter < pos - 1): # Traverse the list until reaching the node before specified node
+                temp = temp.next
+                counter +=1
+
+            temp.next = temp.next.next
+            self.length -= 1
+
+
 
 
     # * Printing Linked List Func : 
@@ -161,7 +186,7 @@ myList.insert(4, 70)
 myList.pop_front()
 myList.pop_back()
 myList.pop_back()
-
+myList.pop(2)
 myList.printLL()
 
 
