@@ -52,7 +52,17 @@ class LinkedList:
         self.length = 0
 
 
-
+    def push_front(self, value):
+        # if List is empty : 
+        if self.head == None:
+            self.head = self.tail = None
+            self.length = 1
+            
+        else:
+            n = Node(value, None)
+            n.next = self.head
+            self.head = n
+            self.length +=1 
 
 
 #* 4 : 
