@@ -53,16 +53,37 @@ class LinkedList:
 
 
     def push_front(self, value):
-        # if List is empty : 
+        n = Node(value, None)
+        
+        # If List is empty : 
         if self.head == None:
-            self.head = self.tail = None
+            self.head = self.tail = n
             self.length = 1
-            
+
         else:
-            n = Node(value, None)
             n.next = self.head
             self.head = n
             self.length +=1 
+
+
+    def printLL(self):
+        # Check if list is empty : 
+        if self.head == None:
+            print("List is empty....")
+        
+        else:
+            temp = self.head
+            while(temp != None):
+                print(f"{temp.data}", end=" -> ")
+                temp = temp.next
+
+
+myList = LinkedList()
+myList.printLL()
+myList.push_front(30)
+myList.push_front(20)
+myList.push_front(10)
+myList.printLL()
 
 
 #* 4 : 
