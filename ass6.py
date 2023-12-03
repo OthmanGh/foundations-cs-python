@@ -54,7 +54,7 @@ class LinkedList:
 
     def push_front(self, value):
         n = Node(value, None)
-        
+
         # If List is empty : 
         if self.head == None:
             self.head = self.tail = n
@@ -66,6 +66,19 @@ class LinkedList:
             self.length +=1 
 
 
+    def push_back(self, value):
+        n = Node(value, None)
+
+        # If List is empty : 
+        if self.head == None:
+            self.head = self.tail = n
+            self.length = 1
+
+        else:
+            self.tail.next = n
+            self.tail = n
+            self.length += 1 
+
     def printLL(self):
         # Check if list is empty : 
         if self.head == None:
@@ -76,12 +89,14 @@ class LinkedList:
             while(temp != None):
                 print(f"{temp.data}", end=" -> ")
                 temp = temp.next
+            print("None")
 
 
 myList = LinkedList()
-myList.printLL()
 myList.push_front(30)
+myList.push_back(40)
 myList.push_front(20)
+myList.push_back(50)
 myList.push_front(10)
 myList.printLL()
 
