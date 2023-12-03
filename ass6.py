@@ -51,6 +51,7 @@ class LinkedList:
         self.tail = None
         self.length = 0
 
+    # *  Implementation of adding nodes at the beginning, ending && pos : 
 
     def push_front(self, value):
         n = Node(value, None)
@@ -103,10 +104,18 @@ class LinkedList:
             n.next = temp.next 
             temp.next = n
             
+            self.length +=1   # update list length val
 
 
-            
+        # *  Implementation of deleting nodes at the beginning, ending && pos : 
+    
+    def pop_front(self):
+        if self.head == None:
+            print("List is empty....")
 
+        else:
+            self.head = self.head.next
+            self.length -= 1
 
     def printLL(self):
         # Check if list is empty : 
@@ -119,6 +128,7 @@ class LinkedList:
                 print(f"{temp.data}", end=" -> ")
                 temp = temp.next
             print("None")
+            print("Length of list : ", self.length)
 
 
 myList = LinkedList()
@@ -131,6 +141,7 @@ myList.push_front(10)
 myList.insert(3, 60)
 myList.insert(4, 70)
 
+myList.pop_front()
 myList.printLL()
 
 
