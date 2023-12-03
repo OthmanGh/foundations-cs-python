@@ -75,7 +75,7 @@ class LinkedList:
             self.length = 1
 
         else:
-            self.tail.next = n
+            self.tail.next = n 
             self.tail = n
             self.length += 1
 
@@ -91,15 +91,16 @@ class LinkedList:
             self.push_back(value)
 
         else: # otherwise : 
-            temp = self.head # get a copy of head pointer
-            n = Node(value, None) # create node data
+            temp = self.head # Get a copy of the head pointer
+            n = Node(value, None) # Create a new node with the given value and a None next pointer
             counter = 0
 
-            while(counter < pos - 1):
+            while(counter < pos - 1): # Traverse the list until reaching the node before the specified position
                 temp = temp.next
                 counter += 1            
-
-            n.next = temp.next
+            
+            # Insert the new node in between the current node and the next node
+            n.next = temp.next 
             temp.next = n
             
 
