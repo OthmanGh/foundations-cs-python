@@ -97,10 +97,11 @@ class LinkedList:
 
             while(counter < pos - 1):
                 temp = temp.next
-                counter += 1
+                counter += 1            
+
+            n.next = temp.next
+            temp.next = n
             
-            print("Last node data before reaching position where new node will be inserted",temp.data)
-            print(counter)
 
 
             
@@ -127,6 +128,8 @@ myList.push_back(50)
 myList.push_front(10)
 
 myList.insert(3, 60)
+myList.insert(4, 70)
+
 myList.printLL()
 
 
