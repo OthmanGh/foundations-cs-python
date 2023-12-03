@@ -77,7 +77,34 @@ class LinkedList:
         else:
             self.tail.next = n
             self.tail = n
-            self.length += 1 
+            self.length += 1
+
+
+    def insert(self, pos, value):
+        if pos < 0 or pos > self.length: # If pos val out of range
+            print("invalid index value")
+
+        if pos == 0: # add at the beginning 
+            self.push_front(value)
+        
+        elif pos == self.length: # add at the end
+            self.push_back(value)
+
+        else: # otherwise : 
+            temp = self.head # get a copy of head pointer
+            n = Node(value, None) # create node data
+            counter = 0
+
+            while(counter < pos - 1):
+                temp = temp.next
+                counter += 1
+            
+            print("Last node data before reaching position where new node will be inserted",temp.data)
+            print(counter)
+
+
+            
+
 
     def printLL(self):
         # Check if list is empty : 
@@ -98,6 +125,8 @@ myList.push_back(40)
 myList.push_front(20)
 myList.push_back(50)
 myList.push_front(10)
+
+myList.insert(3, 60)
 myList.printLL()
 
 
