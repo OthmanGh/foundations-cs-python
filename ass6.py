@@ -40,12 +40,16 @@
 # An input =3 would delete the node containing 11
 
 class Node :
-    def __init__(self, value, next):
+    def __init__(self, value, next): # constructor
         self.data = value
         self.next = next
 
 
-
+class LinkedList:
+    def __init__(self):
+        self.head = None
+        self.tail = None
+        self.length = 0
 
 
 
