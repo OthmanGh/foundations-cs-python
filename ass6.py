@@ -15,31 +15,41 @@
 # Input: (1+[2-3]*4{41+6})  output: True
 
 # 1 : 
+
+#! Note : In our impelementation non-alpha-numeric characters will be ignored as if they don't exist !!!
+
 #* 1st approach : Two Pointers
+
+# Helper Functions : 
+def formatString(string):
+    if len(string) == 0:
+        return False
+    
+    s = ""
+    for char in string:
+        if char.isalnum():
+            s += char.lower()
+    return s
+
 def result(string, r):
     if r :
-        print(f"{string} : is a palindrome")
+        print(f"{string} : is palindrome")
     else:
         print(f"{string} : is not a palindrome")
 
+# Test Data : 
 str1 = "Neveroddoreven"
-str2 = "UFO tofu"
+str2 = "UFO tofu *****"
 str3 = "Borrow or rob?"
-str4 = "sentence"
+str4 = "1122334332211"
 
-def isPalindrome(string):
+def isPalindromeTwoPtrs(string):
+    s = formatString(string)
+
     start = 0
-    end = len(string) - 1
-
-    s = string.lower()
+    end = len(s) - 1
 
     while start < end:
-        start +=1 if not s[start].isalnum() else 0
-        end -=1 if not  s[end].isalnum() else 0
-
-        if not s[start].isalnum() or not s[end].isalnum():
-            continue
-
         if s[start] != s[end]:
             return False
         
@@ -48,19 +58,79 @@ def isPalindrome(string):
 
     return True
 
-r1 = isPalindrome(str1)
-r2 = isPalindrome(str2)
-r3 = isPalindrome(str3)
-r4 = isPalindrome(str4)
+r1 = isPalindromeTwoPtrs(str1)
+r2 = isPalindromeTwoPtrs(str2)
+r3 = isPalindromeTwoPtrs(str3)
+r4 = isPalindromeTwoPtrs(str4)
+
+result(str1, r1)
+result(str2, r2)
+result(str3, r3)
+result(str4, r4)
+print("------------------------------------------")
+
+#* 2nd approach : Using Stack
+# implement stack using dynamic arrays(list)
+class Stack:
+    def __init__(self):
+        self.items = []
+
+    def push(self, value):
+        self.items.append(value)
+
+    def pop(self):
+        if not self.empty():
+            self.items.pop()
+        else:
+            print("Stack is empty....")
+            return None
+    
+    def top(self):
+        if not self.empty():
+            return self.items[-1]
+        else:
+            print("Stack is empty....")
+            return None
+        
+    def empty(self):
+        return len(self.items) == 0
+    
+
+def isPalindromeStack(string):
+    s = formatString(string)
+    data = Stack()
+
+    for char in s:
+            data.push(char)
+
+    reversed_str = ""
+
+    while not data.empty():
+        reversed_str += data.top()
+        data.pop()
+
+    return reversed_str == s
+
+r1 = isPalindromeStack(str1)
+r2 = isPalindromeStack(str2)
+r3 = isPalindromeStack(str3)
+r4 = isPalindromeStack(str4)
 
 result(str1, r1)
 result(str2, r2)
 result(str3, r3)
 result(str4, r4)
 
-#* 2nd approach : Using Stack
+print("------------------------------------------")
+# r1 = isPalindromeStack(str1)
+# r2 = isPalindromeStack(str2)
+# r3 = isPalindromeStack(str3)
+# r4 = isPalindromeStack(str4)
 
-
+# result(str1, r1)
+# result(str2, r2)
+# result(str3, r3)
+# result(str4, r4)
 
 
 
