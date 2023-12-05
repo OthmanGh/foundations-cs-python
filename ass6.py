@@ -14,6 +14,54 @@
 # Input: (1+2)-3*]41+6[ output: False
 # Input: (1+[2-3]*4{41+6})  output: True
 
+# 1 : 
+#* 1st approach : Two Pointers
+def result(string, r):
+    if r :
+        print(f"{string} : is a palindrome")
+    else:
+        print(f"{string} : is not a palindrome")
+
+str1 = "Neveroddoreven"
+str2 = "UFO tofu"
+str3 = "Borrow or rob?"
+str4 = "sentence"
+
+def isPalindrome(string):
+    start = 0
+    end = len(string) - 1
+
+    s = string.lower()
+
+    while start < end:
+        start +=1 if not s[start].isalnum() else 0
+        end -=1 if not  s[end].isalnum() else 0
+
+        if not s[start].isalnum() or not s[end].isalnum():
+            continue
+
+        if s[start] != s[end]:
+            return False
+        
+        start += 1
+        end -= 1
+
+    return True
+
+r1 = isPalindrome(str1)
+r2 = isPalindrome(str2)
+r3 = isPalindrome(str3)
+r4 = isPalindrome(str4)
+
+result(str1, r1)
+result(str2, r2)
+result(str3, r3)
+result(str4, r4)
+
+#* 2nd approach : Using Stack
+
+
+
 
 
 #* 2 : 
@@ -168,7 +216,6 @@ class LinkedList:
                 print(f"{temp.data}", end=" -> ")
                 temp = temp.next
             print("None")
-            print("Length of list : ", self.length)
 
 myList = LinkedList()
 myList.push_front(12)
