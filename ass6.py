@@ -1,3 +1,30 @@
+# Data Structures : 
+
+# * Stack : 
+# implement stack using dynamic array(list)
+class Stack:
+    def __init__(self):
+        self.items = []
+
+    def push(self, value):
+        self.items.append(value)
+
+    def pop(self):
+        if not self.empty():
+            return self.items.pop()
+        else:
+            print("Stack is empty....")
+            return None
+    
+    def top(self):
+        if not self.empty():
+            print(self.items[-1])
+        else:
+            print("Stack is empty....")
+        return None
+        
+    def empty(self):
+        return len(self.items) == 0
 
 #* 1 : 
 # Stacks and Queues
@@ -15,10 +42,7 @@
 # Input: (1+[2-3]*4{41+6})  output: True
 
 # 1 : 
-
 #! Note : In our impelementation non-alpha-numeric characters will be ignored as if they don't exist !!!
-
-#* 1st approach : Two Pointers
 
 # Helper Functions : 
 def formatString(string):
@@ -35,7 +59,7 @@ def result(string, r):
     if r :
         print(f"{string} : is palindrome")
     else:
-        print(f"{string} : is not a palindrome")
+        print(f"{string} : not a palindrome")
 
 # Test Data : 
 str1 = "Neveroddoreven"
@@ -43,6 +67,8 @@ str2 = "UFO tofu *****"
 str3 = "Borrow or rob?"
 str4 = "1122334332211"
 
+
+#* 1st approach : Two Pointers
 def isPalindromeTwoPtrs(string):
     s = formatString(string)
 
@@ -69,45 +95,18 @@ result(str3, r3)
 result(str4, r4)
 print("------------------------------------------")
 
-#* 2nd approach : Using Stack
-# implement stack using dynamic arrays(list)
-class Stack:
-    def __init__(self):
-        self.items = []
-
-    def push(self, value):
-        self.items.append(value)
-
-    def pop(self):
-        if not self.empty():
-            self.items.pop()
-        else:
-            print("Stack is empty....")
-            return None
-    
-    def top(self):
-        if not self.empty():
-            return self.items[-1]
-        else:
-            print("Stack is empty....")
-            return None
-        
-    def empty(self):
-        return len(self.items) == 0
-    
-
+#* 2nd approach : Using a Stack DS
 def isPalindromeStack(string):
     s = formatString(string)
     data = Stack()
 
     for char in s:
-            data.push(char)
+        data.push(char)
 
     reversed_str = ""
 
     while not data.empty():
-        reversed_str += data.top()
-        data.pop()
+        reversed_str +=  data.pop()
 
     return reversed_str == s
 
@@ -120,19 +119,7 @@ result(str1, r1)
 result(str2, r2)
 result(str3, r3)
 result(str4, r4)
-
 print("------------------------------------------")
-# r1 = isPalindromeStack(str1)
-# r2 = isPalindromeStack(str2)
-# r3 = isPalindromeStack(str3)
-# r4 = isPalindromeStack(str4)
-
-# result(str1, r1)
-# result(str2, r2)
-# result(str3, r3)
-# result(str4, r4)
-
-
 
 #* 2 : 
 # Stack
@@ -146,7 +133,24 @@ print("------------------------------------------")
 # Input: SIVLE ****** DAED TNSI ***
 # Output: ELVIS ISNT DEAD
 
+def decode_str(encoded_message):
+    stack = Stack()
+    decoded_message = ""
 
+    for char in encoded_message:
+        if char.isalpha() or char.isspace():
+            stack.push(char)
+        elif char == '*':
+            decoded_message += stack.pop()
+
+    while not stack.empty():
+        decoded_message += stack.pop()
+
+    return decoded_message
+
+print(decode_str("SIVLE ****** DAED TNSI ***"))
+
+print("------------------------------------------")
 
 
 #* 3 : 
@@ -294,24 +298,8 @@ myList.insert(1, 56)
 myList.insert(2, 76)
 myList.printLL()
 
-#myList.pop(0)
-myList.pop(3) # node containing 11 deleted
+myList.pop(2) 
 myList.printLL()
-
-# myList.push_front(30)
-# myList.push_back(40)
-# myList.push_front(20)
-# myList.push_back(50)
-# myList.push_front(10)
-
-# myList.insert(3, 60)
-# myList.insert(4, 70)
-
-# myList.pop_front()
-# myList.pop_back()
-# myList.pop_back()
-# myList.pop(2)
-# myList.printLL()
 
 
 #* 4 : 
