@@ -25,6 +25,45 @@ class Stack:
         
     def empty(self):
         return len(self.items) == 0
+    
+#* Queue :
+# insertion at rear, deletion at head
+class Node:
+    def __init__(self, data, next):
+        self.data = data
+        self.next = next
+
+class Queue:
+    def __init__(self):
+        self.head = None
+        self.rear = None
+
+    def enqueue(self, value):
+        new_node = Node(value, None)
+        if self.head == None:
+            self.head =self.rear = new_node
+        
+        else:
+            self.rear.next = new_node
+            self.rear = new_node
+    
+    def dequeue(self):
+        if self.head == None:
+            print("Queue is empty....")
+        else:
+            if self.head == self.rear:
+                self.head = self.rear = None
+            else:
+                self.head = self.head.next
+
+    def front(self):
+        if self.head == None:
+            print("Queue is empty....")
+        else:
+            return self.head.data
+        
+    def empty(self):
+        return self.head == None
 
 #* 1 : 
 # Stacks and Queues
