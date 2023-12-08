@@ -50,17 +50,20 @@ class Queue:
     def dequeue(self):
         if self.head == None:
             print("Queue is empty....")
+            return None
         else:
+            d = self.head.data
             if self.head == self.rear:
                 self.head = self.rear = None
             else:
                 self.head = self.head.next
+            return d
 
     def front(self):
         if self.head == None:
             print("Queue is empty....")
         else:
-            return self.head.data
+            print(self.head.data)
         
     def empty(self):
         return self.head == None
@@ -106,7 +109,6 @@ str2 = "UFO tofu *****"
 str3 = "Borrow or rob?"
 str4 = "1122334332211"
 
-
 #* 1st approach : Two Pointers
 def isPalindromeTwoPtrs(string):
     s = formatString(string)
@@ -142,12 +144,10 @@ def isPalindromeStack(string):
     for char in s:
         data.push(char)
 
-    reversed_str = ""
-
-    while not data.empty():
-        reversed_str +=  data.pop()
-
-    return reversed_str == s
+    for i in range(len(s)):
+        if data.pop() != s[i]:
+            return False
+    return True
 
 r1 = isPalindromeStack(str1)
 r2 = isPalindromeStack(str2)
@@ -159,6 +159,35 @@ result(str2, r2)
 result(str3, r3)
 result(str4, r4)
 print("------------------------------------------")
+
+
+#* 3nd approach : a Queue DS
+def isPalindromeQueue(string):
+    s = formatString(string)
+
+    queue = Queue()
+
+    for char in s:
+        queue.enqueue(char)
+
+    for i in range(len(s)):
+        if queue.dequeue() != s[i]:
+            return False
+        
+    return True
+
+
+r1 = isPalindromeQueue(str1)
+r2 = isPalindromeQueue(str2)
+r3 = isPalindromeQueue(str3)
+r4 = isPalindromeQueue(str4)
+
+result(str1, r1)
+result(str2, r2)
+result(str3, r3)
+result(str4, r4)
+print("------------------------------------------")
+
 
 #* 2 : 
 # Stack
