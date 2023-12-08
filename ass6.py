@@ -66,22 +66,13 @@ class Queue:
             print(self.head.data)
         
     def empty(self):
-        return self.head == None
+        return not self.head == None
 
 #* 1 : 
 # Stacks and Queues
 # 1.	Use a stack or a queue (or both!) to determine if a given input is a palindrome or not.
 # A palindrom is a sequence of characters that reads the same thing in both directions:
 # Example of palindromes: “mom” “Neveroddoreven” 
-# 2.	Use a stack or a queue (or both!) to determine if a given expression is balanced.
-# The expression will contain a combination of these types of parenthesis: (), {},  or []
-# You have to make sure that for every opening parenthesis, there is a valid closing one.
-# Ex:
-# Input: (1+2)-3*[41+6] output: True
-# Input: (1+2)-3*[41+6} output: False
-# Input: (1+2)-3*[41+6 output: False
-# Input: (1+2)-3*]41+6[ output: False
-# Input: (1+[2-3]*4{41+6})  output: True
 
 # 1 : 
 #! Note : In our impelementation non-alpha-numeric characters will be ignored as if they don't exist !!!
@@ -188,7 +179,42 @@ result(str3, r3)
 result(str4, r4)
 print("------------------------------------------")
 
+# 2 : 
+# 2.	Use a stack or a queue (or both!) to determine if a given expression is balanced.
+# The expression will contain a combination of these types of parenthesis: (), {},  or []
+# You have to make sure that for every opening parenthesis, there is a valid closing one.
+# Ex:
+# Input: (1+2)-3*[41+6] output: True
+# Input: (1+2)-3*[41+6} output: False
+# Input: (1+2)-3*[41+6 output: False
+# Input: (1+2)-3*]41+6[ output: False
+# Input: (1+[2-3]*4{41+6})  output: True
+def balanced_exp_stack(exp):
+    opening_symbols = ['(', '[', '{']
+    closing_symbols = [')', ']', '}']
 
+    stack = Stack()
+
+    for char in exp:
+        if char in opening_symbols:
+            stack.push(char)
+        elif char in closing_symbols:
+            if stack.empty():
+                return False
+            top = stack.pop() 
+            if opening_symbols.index(top) != closing_symbols.index(char):
+                return False
+    
+    return stack.empty()
+
+
+print(balanced_exp_stack("(1+2)-3*[41+6]"))
+print(balanced_exp_stack("(1+2)-3*[41+6}"))
+print(balanced_exp_stack("(1+2)-3*[41+6"))
+print(balanced_exp_stack("(1+2)-3*]41+6["))
+print(balanced_exp_stack("(1+[2-3]*4{41+6})"))
+
+print("------------------------------------------")
 #* 2 : 
 # Stack
 # You work for the MIB (men in black) and would like to decode the messages that they send you.
