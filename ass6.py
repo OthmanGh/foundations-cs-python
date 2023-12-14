@@ -401,15 +401,8 @@ print("------------------------------------------")
 # Graphs
 # 1.	Given a graph where the nodes are cities and the edges are the routes connecting them. Write a function that takes as input two cities and returns true if there is a route connecting them, false otherwise.
 # Write another function that takes as input one city and prints all the other cities directly reachable from it.
-# 2.	Given a graph, write a function that checks if the graph contains a cycle (the graph is directed).
-# 3.	Given a graph that represents the Instagram social media app. The nodes there represent users, and we connect user 1 to user 2 if user 1 follows user 2 (the graph is undirected).
-# Write a function that takes as input a two users and prints the list of users they both follow.
-# Write another function that prints the list of users none of them follow
 
-
-# 1.	Given a graph where the nodes are cities and the edges are the routes connecting them. Write a function that takes as input two cities and returns true if there is a route connecting them, false otherwise.
-
-class Graph:
+class Graph1:
     def __init__(self):
         self.adj_list = {}
 
@@ -445,17 +438,15 @@ class Graph:
     def print_reachable_cities(self, city):
         if city in self.adj_list.keys():
             if len(self.adj_list[city]) > 0:
-                print(f"from {city} we can reach directly : ", end="")
+                print(f"From {city} we can reach directly : ", end="")
                 for cities in self.adj_list[city]:
                     print(cities['city'], end=", ")
             else:
                 print(f"No route in {city}'s direction")
         else:
             print("city don't exist")
-
     
-graph = Graph()
-
+graph = Graph1()
 
 c1 = "Zahle"
 c2 = "Beirut"
@@ -481,9 +472,87 @@ print(graph.is_there_route(c1, c5))
 
 graph.print_reachable_cities(c6)
 graph.print_reachable_cities(c1)
+print()
+print("------------------------------------------")
+
+
+###############################################################################################################
+
+# 3.	Given a graph, write a function that checks if the graph contains a cycle (the graph is directed).
+# 4.	Given a graph that represents the Instagram social media app. The nodes there represent users, and we connect user 1 to user 2 if user 1 follows user 2 (the graph is undirected).
+# 5 -  Write a function that takes as input a two users and prints the list of users they both follow.
+# 6 - Write another function that prints the list of users none of them follow
 
 
 
+class Graph2:
+    def __init__(self):
+        self.adj_list = {}
+
+    def add_vertex(self, v):
+        if v not in self.adj_list.keys():
+            self.adj_list[v] = []
+            return True
+        else:
+            return False
+        
+    def add_edge(self, c1, c2): # directed graph
+        if c1 in self.adj_list and c2 in self.adj_list:
+            self.adj_list[c1].append(c2) 
+            return True
+        else:
+            return False
+        
+
+    # 3.	Given a graph, write a function that checks if the graph contains a cycle (the graph is directed).
+    def contains_cycle(self):
+        visited = set()
+        recursion_stack = set()
+
+        def dfs(node):
+            visited.add(node)
+            recursion_stack.add(node)
+
+            if node in self.adj_list:
+                for neighbor in self.adj_list[node]:
+                    if neighbor not in visited:
+                        if dfs(neighbor):
+                            return True
+                    elif neighbor in recursion_stack:
+                        return True
+
+            recursion_stack.remove(node)
+            return False
+
+        for node in self.adj_list:
+            if node not in visited:
+                if dfs(node):
+                    return True
+
+        return False
+
+        
+    def print_graph(self):
+        for city in self.adj_list:
+            print(city, f" : {self.adj_list[city]}")
 
 
+graph2 = Graph2()
 
+city1 = "Zahle"
+city2 = "Beirut"
+city3 = "Saida"
+city4 = "Tripoli"
+graph2.add_vertex(c1)
+graph2.add_vertex(c2)
+graph2.add_vertex(c3)
+graph2.add_vertex(c4)
+
+
+graph2.add_edge(city1, city2)
+graph2.add_edge(city2, city3)
+graph2.add_edge(city3, city1)
+
+
+graph2.print_graph()
+print(graph2.contains_cycle())
