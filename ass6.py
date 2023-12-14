@@ -440,6 +440,18 @@ class Graph:
                 return True
                
         return False
+    # Write another function that takes as input one city and prints all the other cities directly reachable from it.
+    # 2.
+    def print_reachable_cities(self, city):
+        if city in self.adj_list.keys():
+            if len(self.adj_list[city]) > 0:
+                print(f"from {city} we can reach directly : ", end="")
+                for cities in self.adj_list[city]:
+                    print(cities['city'], end=", ")
+            else:
+                print(f"No route in {city}'s direction")
+        else:
+            print("city don't exist")
 
     
 graph = Graph()
@@ -450,11 +462,13 @@ c2 = "Beirut"
 c3 = "Saida"
 c4 = "Tripoli"
 c5 = "Akkar"
+c6 = "Jounieh"
 graph.add_vertex(c1)
 graph.add_vertex(c2)
 graph.add_vertex(c3)
 graph.add_vertex(c4)
 graph.add_vertex(c5)
+graph.add_vertex(c6)
 
 graph.add_edge(c1, c2, 47)
 graph.add_edge(c1, c3, 86)
@@ -465,7 +479,8 @@ graph.add_edge(c2, c5, 109)
 print(graph.is_there_route(c2, c1))
 print(graph.is_there_route(c1, c5))
 
-
+graph.print_reachable_cities(c6)
+graph.print_reachable_cities(c1)
 
 
 
