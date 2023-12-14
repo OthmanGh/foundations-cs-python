@@ -395,6 +395,7 @@ myList.printLL()
 myList.pop(2) 
 myList.printLL()
 
+print("------------------------------------------")
 
 #* 4 : 
 # Graphs
@@ -404,3 +405,56 @@ myList.printLL()
 # 3.	Given a graph that represents the Instagram social media app. The nodes there represent users, and we connect user 1 to user 2 if user 1 follows user 2 (the graph is undirected).
 # Write a function that takes as input a two users and prints the list of users they both follow.
 # Write another function that prints the list of users none of them follow
+
+
+# 1.	Given a graph where the nodes are cities and the edges are the routes connecting them. Write a function that takes as input two cities and returns true if there is a route connecting them, false otherwise.
+
+class Graph:
+    def __init__(self):
+        self.adj_list = {}
+
+    def add_vertex(self, v):
+        if v not in self.adj_list:
+            self.adj_list[v] = []
+            return True
+        return False
+
+    def add_edge(self, v1, v2, distance):
+        if v1 in self.adj_list and v2 in self.adj_list:
+            self.adj_list[v1].append({'city' : v2, 'distance' : distance})
+            self.adj_list[v2].append({'city': v1, 'distance' : distance})
+            return True
+        return False
+    
+
+    def print_adj_list(self):
+        for v in self.adj_list.keys():
+            print(v, f": {self.adj_list[v]}")
+    
+graph = Graph()
+
+
+c1 = "Zahle"
+c2 = "Beirut"
+c3 = "Saida"
+c4 = "Tripoli"
+graph.add_vertex(c1)
+graph.add_vertex(c2)
+graph.add_vertex(c3)
+graph.add_vertex(c4)
+
+graph.add_edge(c1, c2, 47)
+graph.add_edge(c1, c3, 86)
+graph.add_edge(c3, c4, 75)
+graph.add_edge(c4, c1, 92)
+graph.add_edge(c2, c4, 68)
+graph.print_adj_list()
+
+
+
+
+
+
+
+
+
