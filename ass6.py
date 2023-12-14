@@ -430,6 +430,17 @@ class Graph:
     def print_adj_list(self):
         for v in self.adj_list.keys():
             print(v, f": {self.adj_list[v]}")
+
+
+    # 1.
+    def is_there_route(self, c1, c2):
+        if c1 in self.adj_list.keys() and c2 in self.adj_list.keys():
+           for info in self.adj_list[c1]:
+               if info['city'] == c2:
+                return True
+               
+        return False
+
     
 graph = Graph()
 
@@ -438,18 +449,21 @@ c1 = "Zahle"
 c2 = "Beirut"
 c3 = "Saida"
 c4 = "Tripoli"
+c5 = "Akkar"
 graph.add_vertex(c1)
 graph.add_vertex(c2)
 graph.add_vertex(c3)
 graph.add_vertex(c4)
+graph.add_vertex(c5)
 
 graph.add_edge(c1, c2, 47)
 graph.add_edge(c1, c3, 86)
 graph.add_edge(c3, c4, 75)
 graph.add_edge(c4, c1, 92)
 graph.add_edge(c2, c4, 68)
-graph.print_adj_list()
-
+graph.add_edge(c2, c5, 109)
+print(graph.is_there_route(c2, c1))
+print(graph.is_there_route(c1, c5))
 
 
 
