@@ -479,12 +479,6 @@ print("------------------------------------------")
 ###############################################################################################################
 
 # 3.	Given a graph, write a function that checks if the graph contains a cycle (the graph is directed).
-# 4.	Given a graph that represents the Instagram social media app. The nodes there represent users, and we connect user 1 to user 2 if user 1 follows user 2 (the graph is undirected).
-# 5 -  Write a function that takes as input a two users and prints the list of users they both follow.
-# 6 - Write another function that prints the list of users none of them follow
-
-
-
 class Graph2:
     def __init__(self):
         self.adj_list = {}
@@ -504,7 +498,7 @@ class Graph2:
             return False
         
 
-    # 3.	Given a graph, write a function that checks if the graph contains a cycle (the graph is directed).
+    # 3
     def contains_cycle(self):
         visited = set()
         recursion_stack = set()
@@ -556,3 +550,27 @@ graph2.add_edge(city3, city1)
 
 graph2.print_graph()
 print(graph2.contains_cycle())
+
+
+# 4.	Given a graph that represents the Instagram social media app. The nodes there represent users, and we connect user 1 to user 2 if user 1 follows user 2 (the graph is undirected).
+# 5 -  Write a function that takes as input a two users and prints the list of users they both follow.
+# 6 - Write another function that prints the list of users none of them follow
+
+class social_graph:
+    def __init__(self):
+        self.users = {}
+
+    def add_vertex(self, v):
+        if v not in self.users:
+            self.users[v] = []
+
+    def add_edge(self, user_1, user_2, follows):  # follows will be a boolean value
+        if user_1 in self.users and user_2 in self.users:
+            if follows:
+                self.users[user_1].append(user_2)
+                self.users[user_2].append(user_1)
+            else:
+                self.users[user_1].remove(user_2)
+                self.users[user_2].remove(user_1)
+        else:
+            print("One or more users not found in the graph.")
