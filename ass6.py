@@ -591,17 +591,48 @@ class social_graph:
         else:
             print("One or more users not found in the graph.")
 
+    
+    # 6
+    def no_common_followers(self, user_1, user_2):
+        if user_1 in self.users and user_2 in self.users:
+            followers_user_1 = self.users[user_1]
+            followers_user_2 = self.users[user_2]
 
+            print(user_1, "Follows : ", self.users[user_1])
+            print(user_2, "Follows : ", self.users[user_2])
+
+            all_users = []
+
+            for user in self.users.keys():
+                if not user == user_1 and not user == user_2:
+                    all_users.append(user)
+
+            non_followers_list = []
+            for user in all_users:
+                if user not in followers_user_1 and user not in followers_user_2 and user != user_1 and user != user_2:
+                    non_followers_list.append(user)
+            print(f"None of {user_1} nor {user_2} follows: {non_followers_list}")
+        else:
+            print("One or more users not found in the graph.")
 
 instagram_graph = social_graph()
 instagram_graph.add_vertex('Ali')
 instagram_graph.add_vertex('Hussein')
 instagram_graph.add_vertex('Mohammad')
+instagram_graph.add_vertex('Ahmad')
+instagram_graph.add_vertex('Hilal')
+instagram_graph.add_vertex('Jomaa')
+
 
 instagram_graph.add_edge('Ali', 'Hussein', True)
 instagram_graph.add_edge('Hussein', 'Mohammad', True)
 instagram_graph.add_edge('Ali', 'Mohammad', True)
+instagram_graph.add_edge('Jomaa', 'Mohammad', True)
+instagram_graph.add_edge('Hilal', 'Jomaa', True)
+instagram_graph.add_edge('Ahmad', 'Hilal', True)
 
 
 # Example Function Calls
-instagram_graph.common_followers('Mohammad', 'Hussein')
+instagram_graph.common_followers('Ali', 'Hussein')
+print("------------------------------------------")
+instagram_graph.no_common_followers('Hussein', 'Jomaa')
