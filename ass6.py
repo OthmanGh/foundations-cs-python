@@ -551,6 +551,7 @@ graph2.add_edge(city3, city1)
 graph2.print_graph()
 print(graph2.contains_cycle())
 
+print("------------------------------------------")
 
 # 4.	Given a graph that represents the Instagram social media app. The nodes there represent users, and we connect user 1 to user 2 if user 1 follows user 2 (the graph is undirected).
 # 5 -  Write a function that takes as input a two users and prints the list of users they both follow.
@@ -574,3 +575,33 @@ class social_graph:
                 self.users[user_2].remove(user_1)
         else:
             print("One or more users not found in the graph.")
+
+    # 5 
+    def common_followers(self, user_1, user_2):
+        if user_1 in self.users and user_2 in self.users:
+            followers_user_1 = self.users[user_1]
+            followers_user_2 = self.users[user_2]
+            print(user_1, " Follows : ", self.users[user_1])
+            print(user_2, " Follows : ", self.users[user_2])
+            common_followers_list = []
+            for user in followers_user_1:
+                if user in followers_user_2:
+                    common_followers_list.append(user)
+            print(f"Both {user_1} and {user_2} follows: {common_followers_list}")
+        else:
+            print("One or more users not found in the graph.")
+
+
+
+instagram_graph = social_graph()
+instagram_graph.add_vertex('Ali')
+instagram_graph.add_vertex('Hussein')
+instagram_graph.add_vertex('Mohammad')
+
+instagram_graph.add_edge('Ali', 'Hussein', True)
+instagram_graph.add_edge('Hussein', 'Mohammad', True)
+instagram_graph.add_edge('Ali', 'Mohammad', True)
+
+
+# Example Function Calls
+instagram_graph.common_followers('Mohammad', 'Hussein')
